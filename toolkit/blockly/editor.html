@@ -5,6 +5,12 @@
     <meta charset="utf-8">
     <title>quanta blockly assembler</title>
     <script src="google-blockly-7679d22/blockly_compressed.js"></script>
+
+    <script src="generator/quanta.js"></script>
+    <script src="generator/quanta/math.js"></script>
+    <script src="generator/quanta/type.js"></script>
+    <script src="generator/quanta/instruction.js"></script>
+
     <script src="google-blockly-7679d22/blocks_compressed.js"></script>
     <script src="google-blockly-7679d22/msg/js/en.js"></script>
 
@@ -32,11 +38,18 @@
         </block>
     </xml>
 
+    <input id="generate-button" type="button" value="Generate!">
+
     <script>
         var workspace = Blockly.inject('blocklyDiv',
             {
-                media: 'google-blockly-7679d22//media/',
+                media: 'google-blockly-7679d22/media/',
                 toolbox: document.getElementById('toolbox'),
+            });
+
+            document.getElementById('generate-button').addEventListener('click', function onGenerate() {
+                var code = Blockly.quanta.workspaceToCode(workspace);
+                alert(code);
             });
     </script>
 </body>

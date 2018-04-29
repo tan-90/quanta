@@ -1,5 +1,3 @@
-// TODO programatically generate register names
-
 /**
  * Type blocks
  * 
