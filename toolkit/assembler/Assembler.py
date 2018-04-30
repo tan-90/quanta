@@ -1,56 +1,44 @@
 import json
+import re
 
-def read_file(path):
-    file = open(path)
-    return file.readlines()
+from Instruction import Instruction
+from Util import read_file, strip_line
 
-def strip_line(line):
-    return line.replace(' ', '').replace('\t', '').replace('\n', '').replace('--', '')
+class Assembler:
+    def __init__(self, params):
+        self.arg_types = params['arg_types']
+        self.instructions = {attribs['alias']: Instruction(attribs) for attribs in params['instructions']}
 
-def get_assembler_annotations(lines):
-    current_line = 0
-    while current_line < len(lines):
-        line = strip_line(lines[current_line])
-        if line.startswith('@assembler'):
-            line = line[len('@assembler.'):]
-            if line.startswith('instruction'):
-                pass
-            elif line.startswith('params'):
-                pass
+    def assemble(self, program):
+        lines = program.split('\n')
+        words = []
 
-            json_string = ''
-            while not line.startswith('};'):
-                current_line += 1
-                line = strip_line(lines[current_line])
-                json_string += line
-            print(json.loads(json_string[:-1]))
-            
-        current_line += 1
-
-get_assembler_annotations(read_file('Constants.vhdl'))
-exit()
-
-file = open('Constants.vhdl')
-lines = file.readlines()
-
-current_line = 0
-
-while True:
-    line = lines[current_line]
-    line = line.replace(" ", "")
-    if line.startswith('--@assembler'):
-        line = line[len('--@assembler.'):]
-        
-        if line.startswith('instruction'):
-            current_line += 1
-            line = lines[current_line]
-            line = line.replace(" ", "")
-            line = line.replace("--", "")
-            while not line.startswith('};'):
-                print(line)
-                current_line += 1
-                line = lines[current_line]
-                line = line.replace(" ", "")
-                line = line.replace("--", "")
+        for line in lines:
+            alias, args = self.parse(line)
+            words.append(self.instructions[alias].assemble(args, self.arg_types))
+        return words
     
-    current_line += 1            
+    def parse(self, line):
+        separator = line.index(' ')
+        alias = line[:separator]
+        
+        args = []
+        separator = 0
+        for arg in self.instructions[alias].args:
+            if(arg.startswith('padding_')):
+                args.append(0)
+            else:
+                separator += 2 + line[separator + 1:].index(' ')
+                value = re.findall(self.arg_types[arg]['regex'], line[separator:])[0]
+                args.append(value)
+        return alias, args
+
+    @staticmethod
+    def params_from_file(path):
+        json_str = read_file(path)
+        json_str = strip_line(json_str)
+        return json.loads(json_str)
+
+q = Assembler(Assembler.params_from_file('quanta.json'))
+bits = q.assemble(read_file('program.qtf'))
+print(bits)

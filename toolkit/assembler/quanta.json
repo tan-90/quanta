@@ -1,0 +1,38 @@
+{
+	"arg_types": {
+		"register": {
+            "regex": "\\$(\\d+)",
+			"length": 5
+		},
+		"immediate": {
+            "regex": "\\d+",
+			"length": 16
+        },
+        "padding_3": {
+            "length": 3
+        }
+	},
+    "instructions": [
+        {
+            "name": "Load Immediate",
+            "description": "Who cares",
+            "alias": "li",
+            "opcode": 1,
+            "args": [
+                "register",
+                "padding_3",
+                "immediate"
+            ]
+        },
+        {
+            "name": "Add",
+            "description": "Who cares",
+            "alias": "add",
+            "opcode": 2,
+            "args": [
+                "register",
+                "register"
+            ]
+        }
+    ]
+}
