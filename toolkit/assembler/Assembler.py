@@ -8,6 +8,8 @@ from Util import read_file, strip_line, write_file
 class Assembler:
     def __init__(self, params, verbose=False):
         self.arg_types = params['arg_types']
+        self.instruction_types = params['instruction_types']
+
         self.instructions = {attribs['alias']: Instruction(attribs) for attribs in params['instructions']}
         
         self.verbose = verbose
@@ -20,16 +22,17 @@ class Assembler:
 
         for line in lines:
             alias, args = self.parse(line)
-            words.append(self.instructions[alias].assemble(args, self.arg_types))
+            words.append(self.instructions[alias].assemble(args, self.arg_types, self.instruction_types))
         return words
     
     def parse(self, line):
         separator = line.index(' ')
         alias = line[:separator]
+        line_type = self.instructions[alias].type
         
         args = []
         separator = 0
-        for arg in self.instructions[alias].args:
+        for arg in self.instruction_types[line_type]:
             if(arg.startswith('padding_')):
                 args.append(0)
             else:

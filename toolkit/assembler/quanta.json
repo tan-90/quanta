@@ -15,214 +15,179 @@
             "length": 10
         }
     },
+    "instruction_types": {
+        "noop": [
+
+        ],
+        "immediate": [
+            "register",
+            "padding_3",
+            "immediate"
+        ],
+        "single_register": [
+            "register"
+        ],
+        "double_register": [
+            "register",
+            "register"
+        ],
+        "triple_register": [
+            "register",
+            "register",
+            "register"
+        ],
+        "jump": [
+            "padding_10",
+            "register"
+        ]
+    },
     "instructions": [
         {
             "name": "NOOP",
             "description": "",
             "alias": "noop",
             "opcode": 0,
-            "args": [
-            ]
+            "type": "noop"
         },
         {
             "name": "Load Immediate",
             "description": "",
             "alias": "li",
             "opcode": 1,
-            "args": [
-                "register",
-                "padding_3",
-                "immediate"
-            ]
+            "type": "immediate"
         },
         {
             "name": "Move",
             "description": "",
             "alias": "mov",
             "opcode": 2,
-            "args": [
-                "register",
-                "register"
-            ]
+            "type": "double_register"
         },
         {
             "name": "Load",
             "description": "",
             "alias": "load",
             "opcode": 3,
-            "args": [
-                "register",
-                "register"
-            ]
+            "type": "double_register"
         },
         {
             "name": "Store",
             "description": "",
             "alias": "store",
             "opcode": 4,
-            "args": [
-                "register",
-                "register"
-            ]
+            "type": "double_register"
         },
         {
             "name": "Add",
             "description": "",
             "alias": "add",
             "opcode": 5,
-            "args": [
-                "register",
-                "register"
-            ]
+            "type": "double_register"
         },
         {
             "name": "Subtract",
             "description": "",
             "alias": "sub",
             "opcode": 6,
-            "args": [
-                "register",
-                "register"
-            ]
+            "type": "double_register"
         },
         {
             "name": "AND",
             "description": "",
             "alias": "and",
             "opcode": 7,
-            "args": [
-                "register",
-                "register"
-            ]
+            "type": "double_register"
         },
         {
             "name": "OR",
             "description": "",
             "alias": "or",
             "opcode": 8,
-            "args": [
-                "register",
-                "register"
-            ]
+            "type": "double_register"
         },
         {
             "name": "XOR",
             "description": "",
             "alias": "xor",
             "opcode": 9,
-            "args": [
-                "register",
-                "register"
-            ]
+            "type": "double_register"
         },
         {
             "name": "XNOR",
             "description": "",
             "alias": "xnor",
             "opcode": 10,
-            "args": [
-                "register",
-                "register"
-            ]
+            "type": "double_register"
         },
         {
             "name": "NOT",
             "description": "",
             "alias": "not",
             "opcode": 11,
-            "args": [
-                "register"
-            ]
+            "type": "single_register"
         },
         {
             "name": "Shift Left",
             "description": "",
             "alias": "sl",
             "opcode": 12,
-            "args": [
-                "register"
-            ]
+            "type": "single_register"
         },
         {
             "name": "Shift Right",
             "description": "",
             "alias": "sr",
             "opcode": 13,
-            "args": [
-                "register"
-            ]
+            "type": "single_register"
         },
         {
             "name": "Rotate Left",
             "description": "",
             "alias": "rl",
             "opcode": 16,
-            "args": [
-                "register"
-            ]
+            "type": "single_register"
         },
         {
             "name": "Rotate Right",
             "description": "",
             "alias": "rr",
             "opcode": 17,
-            "args": [
-                "register"
-            ]
+            "type": "single_register"
         },
         {
             "name": "Jump",
             "description": "",
             "alias": "j",
             "opcode": 18,
-            "args": [
-                "padding_10",
-                "register"
-            ]
+            "type": "jump"
         },
         {
             "name": "Jump Equals",
             "description": "",
             "alias": "je",
             "opcode": 19,
-            "args": [
-                "register",
-                "register",
-                "register"
-            ]
+            "type": "triple_register"
         },
         {
             "name": "Jump Not Equals",
             "description": "",
             "alias": "jne",
             "opcode": 20,
-            "args": [
-                "register",
-                "register",
-                "register"
-            ]
+            "type": "triple_register"
         },
         {
             "name": "Jump Lesser Then",
             "description": "",
             "alias": "jl",
             "opcode": 21,
-            "args": [
-                "register",
-                "register",
-                "register"
-            ]
+            "type": "triple_register"
         },
         {
             "name": "Jump Greater Then",
             "description": "",
             "alias": "jg",
             "opcode": 22,
-            "args": [
-                "register",
-                "register",
-                "register"
-            ]
+            "type": "triple_register"
         }
     ]
 }
