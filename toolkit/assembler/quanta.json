@@ -10,12 +10,23 @@
         },
         "padding_3": {
             "length": 3
+        },
+        "padding_10": {
+            "length": 10
         }
-	},
+    },
     "instructions": [
         {
+            "name": "NOOP",
+            "description": "",
+            "alias": "noop",
+            "opcode": 0,
+            "args": [
+            ]
+        },
+        {
             "name": "Load Immediate",
-            "description": "Who cares",
+            "description": "",
             "alias": "li",
             "opcode": 1,
             "args": [
@@ -25,11 +36,190 @@
             ]
         },
         {
-            "name": "Add",
-            "description": "Who cares",
-            "alias": "add",
+            "name": "Move",
+            "description": "",
+            "alias": "mov",
             "opcode": 2,
             "args": [
+                "register",
+                "register"
+            ]
+        },
+        {
+            "name": "Load",
+            "description": "",
+            "alias": "load",
+            "opcode": 3,
+            "args": [
+                "register",
+                "register"
+            ]
+        },
+        {
+            "name": "Store",
+            "description": "",
+            "alias": "store",
+            "opcode": 4,
+            "args": [
+                "register",
+                "register"
+            ]
+        },
+        {
+            "name": "Add",
+            "description": "",
+            "alias": "add",
+            "opcode": 5,
+            "args": [
+                "register",
+                "register"
+            ]
+        },
+        {
+            "name": "Subtract",
+            "description": "",
+            "alias": "sub",
+            "opcode": 6,
+            "args": [
+                "register",
+                "register"
+            ]
+        },
+        {
+            "name": "AND",
+            "description": "",
+            "alias": "and",
+            "opcode": 7,
+            "args": [
+                "register",
+                "register"
+            ]
+        },
+        {
+            "name": "OR",
+            "description": "",
+            "alias": "or",
+            "opcode": 8,
+            "args": [
+                "register",
+                "register"
+            ]
+        },
+        {
+            "name": "XOR",
+            "description": "",
+            "alias": "xor",
+            "opcode": 9,
+            "args": [
+                "register",
+                "register"
+            ]
+        },
+        {
+            "name": "XNOR",
+            "description": "",
+            "alias": "xnor",
+            "opcode": 10,
+            "args": [
+                "register",
+                "register"
+            ]
+        },
+        {
+            "name": "NOT",
+            "description": "",
+            "alias": "not",
+            "opcode": 11,
+            "args": [
+                "register"
+            ]
+        },
+        {
+            "name": "Shift Left",
+            "description": "",
+            "alias": "sl",
+            "opcode": 12,
+            "args": [
+                "register"
+            ]
+        },
+        {
+            "name": "Shift Right",
+            "description": "",
+            "alias": "sr",
+            "opcode": 13,
+            "args": [
+                "register"
+            ]
+        },
+        {
+            "name": "Rotate Left",
+            "description": "",
+            "alias": "rl",
+            "opcode": 16,
+            "args": [
+                "register"
+            ]
+        },
+        {
+            "name": "Rotate Right",
+            "description": "",
+            "alias": "rr",
+            "opcode": 17,
+            "args": [
+                "register"
+            ]
+        },
+        {
+            "name": "Jump",
+            "description": "",
+            "alias": "j",
+            "opcode": 18,
+            "args": [
+                "padding_10",
+                "register"
+            ]
+        },
+        {
+            "name": "Jump Equals",
+            "description": "",
+            "alias": "je",
+            "opcode": 19,
+            "args": [
+                "register",
+                "register",
+                "register"
+            ]
+        },
+        {
+            "name": "Jump Not Equals",
+            "description": "",
+            "alias": "jne",
+            "opcode": 20,
+            "args": [
+                "register",
+                "register",
+                "register"
+            ]
+        },
+        {
+            "name": "Jump Lesser Then",
+            "description": "",
+            "alias": "jl",
+            "opcode": 21,
+            "args": [
+                "register",
+                "register",
+                "register"
+            ]
+        },
+        {
+            "name": "Jump Greater Then",
+            "description": "",
+            "alias": "jg",
+            "opcode": 22,
+            "args": [
+                "register",
                 "register",
                 "register"
             ]

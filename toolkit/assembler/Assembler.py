@@ -2,14 +2,19 @@ import json
 import re
 
 from Instruction import Instruction
-from Util import read_file, strip_line
+from MIF import MIF
+from Util import read_file, strip_line, write_file
 
 class Assembler:
-    def __init__(self, params):
+    def __init__(self, params, verbose=False):
         self.arg_types = params['arg_types']
         self.instructions = {attribs['alias']: Instruction(attribs) for attribs in params['instructions']}
+        
+        self.verbose = verbose
 
     def assemble(self, program):
+        self.log(self)
+
         lines = program.split('\n')
         words = []
 
@@ -33,6 +38,13 @@ class Assembler:
                 args.append(value)
         return alias, args
 
+    def __str__(self):
+        return 'arg_types: ' + str(self.arg_types) + ', instructions: ' + str(self.instructions)
+
+    def log(self, message):
+        if self.verbose:
+            print(message)
+
     @staticmethod
     def params_from_file(path):
         json_str = read_file(path)
@@ -41,4 +53,5 @@ class Assembler:
 
 q = Assembler(Assembler.params_from_file('quanta.json'))
 bits = q.assemble(read_file('program.qtf'))
-print(bits)
+mif = MIF(32, 256, 'BIN', 'BIN', bits)
+write_file('program.mif', mif.as_file())

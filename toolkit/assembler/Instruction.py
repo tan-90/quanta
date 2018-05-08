@@ -1,4 +1,5 @@
 import json
+
 from Util import dec_to_fixed_length_bin, vhdl_hex_to_int
 
 
@@ -20,7 +21,7 @@ class Instruction:
         return word.ljust(32, '0')
     
     def __str__(self):
-        return 'Name: ' + self.name + ', Description: ' + self.description + ', OPCODE: ' + str(self.opcode) + ', args: ' + str(self.args)
+        return 'name: ' + self.name + ', description: ' + self.description + ', OPCODE: ' + str(self.opcode) + ', args: ' + str(self.args)
 
     @staticmethod
     def assemble_arg(arg_types, arg_type, arg_value):
