@@ -11,12 +11,12 @@
     <script src="generator/quanta/type.js"></script>
     <script src="generator/quanta/value.js"></script>
     <script src="generator/quanta/instruction.js"></script>
+    <script src="generator/quanta/label_group.js"></script>
 
     <script src="../../external/blockly/blocks_compressed.js"></script>
     <script src="../../external/blockly/msg/js/en.js"></script>
 
     <script src="quanta_blocks.js"></script>
-    <script src="quanta_listener.js"></script>
 
     <style>
         body {
@@ -43,11 +43,11 @@
             <block type="label_group"></block>
         </category>
         <category name="Value">
+            <block type="comment"></block>
             <block type="type_register"></block>
             <block type="math_number">
                 <field name="NUM">0</field>
-            </block>
-            <block type="comment"></block>
+            </block>            
         </category>
     </xml>
 
@@ -59,11 +59,11 @@
                 media: '../../external/blockly/media/',
                 toolbox: document.getElementById('toolbox'),
             });
-        
-        workspace.addChangeListener(listener);
 
         document.getElementById('generate-button').addEventListener('click', function onGenerate() {
             var code = Blockly.quanta.workspaceToCode(workspace);
+            
+            console.log(code);
             alert(code);
         });
     </script>

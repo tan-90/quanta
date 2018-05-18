@@ -17,41 +17,6 @@ Blockly.quanta.addReservedWords(
 Blockly.quanta.ORDER_ATOMIC = 0;
 
 /*
- * Initial tests
- * Dealing with assembler jump labels
- * Needs refactoring 
- */
-Blockly.quanta.labels = [["Test", "TEST"], ["Something", "SOMETHING"], ["Something else", "SOMETHING ELSE"], ["I'm bored", "IM_BORED"]];
-
-Blockly.quanta.handleNewLabel = function(block)
-{
-  /*
-   * Add label input field to list of available labels
-   */
-}
-
-Blockly.quanta.handleChangeLabel = function (block)
-{
-  /*
-   * Remove label input field to list of available labels
-   * Propagate delete event to jump blocks using labels
-   */
-}
-
-Blockly.quanta.handleDeleteLabel = function(block)
-{
-  /*
-   * Remove label input field to list of available labels
-   * Propagate delete event to jump blocks using labels
-   */
-}
-
-Blockly.quanta.getAllLabels = function()
-{
-  return Blockly.quanta.labels;
-}
-
-/*
  * Copied from Blockly Javascript generator
  * 
  * Needs tweaking

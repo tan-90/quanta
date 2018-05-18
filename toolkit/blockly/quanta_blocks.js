@@ -13,143 +13,144 @@
  */
 var typeRegisterJson = {
     "type": "type_register",
-    "message0": "%1",
+    "message0": "$ %1",
     "args0": [
         {
             "type": "field_dropdown",
             "name": "NAME",
             "options": [
                 [
-                    "$0",
-                    "REGISTER_0"
+                    "0",
+                    "$0"
                 ],
                 [
-                    "$1",
-                    "REGISTER_1"
+                    "1",
+                    "$1"
                 ],
                 [
-                    "$2",
-                    "REGISTER_2"
+                    "2",
+                    "$2"
                 ],
                 [
-                    "$3",
-                    "REGISTER_3"
+                    "3",
+                    "$3"
                 ],
                 [
-                    "$4",
-                    "REGISTER_4"
+                    "4",
+                    "$4"
                 ],
                 [
-                    "$5",
-                    "REGISTER_5"
+                    "5",
+                    "$5"
                 ],
                 [
-                    "$6",
-                    "REGISTER_6"
+                    "6",
+                    "$6"
                 ],
                 [
-                    "$7",
-                    "REGISTER_7"
+                    "7",
+                    "$7"
                 ],
                 [
-                    "$8",
-                    "REGISTER_8"
+                    "8",
+                    "$8"
                 ],
                 [
-                    "$9",
-                    "REGISTER_9"
+                    "9",
+                    "$9"
                 ],
                 [
-                    "$10",
-                    "REGISTER_10"
+                    "10",
+                    "$10"
                 ],
                 [
-                    "$11",
-                    "REGISTER_11"
+                    "11",
+                    "$11"
                 ],
                 [
-                    "$12",
-                    "REGISTER_12"
+                    "12",
+                    "$12"
                 ],
                 [
-                    "$13",
-                    "REGISTER_13"
+                    "13",
+                    "$13"
                 ],
                 [
-                    "$14",
-                    "REGISTER_14"
+                    "14",
+                    "$14"
                 ],
                 [
-                    "$15",
-                    "REGISTER_15"
+                    "15",
+                    "$15"
                 ],
                 [
-                    "$16",
-                    "REGISTER_16"
+                    "16",
+                    "$16"
                 ],
                 [
-                    "$17",
-                    "REGISTER_17"
+                    "17",
+                    "$17"
                 ],
                 [
-                    "$18",
-                    "REGISTER_18"
+                    "18",
+                    "$18"
                 ],
                 [
-                    "$19",
-                    "REGISTER_19"
+                    "19",
+                    "$19"
                 ],
                 [
-                    "$20",
-                    "REGISTER_20"
+                    "20",
+                    "$20"
                 ],
                 [
-                    "$21",
-                    "REGISTER_21"
+                    "21",
+                    "$21"
                 ],
                 [
-                    "$22",
-                    "REGISTER_22"
+                    "22",
+                    "$22"
                 ],
                 [
-                    "$23",
-                    "REGISTER_23"
+                    "23",
+                    "$23"
                 ],
                 [
-                    "$24",
-                    "REGISTER_24"
+                    "24",
+                    "$24"
                 ],
                 [
-                    "$25",
-                    "REGISTER_25"
+                    "25",
+                    "$25"
                 ],
                 [
-                    "$26",
-                    "REGISTER_26"
+                    "26",
+                    "$26"
                 ],
                 [
-                    "$27",
-                    "REGISTER_27"
+                    "27",
+                    "$27"
                 ],
                 [
-                    "$28",
-                    "REGISTER_28"
+                    "28",
+                    "$28"
                 ],
                 [
-                    "$29",
-                    "REGISTER_29"
+                    "29",
+                    "$29"
                 ],
                 [
-                    "$30",
-                    "REGISTER_30"
+                    "30",
+                    "$30"
                 ],
                 [
-                    "$31",
-                    "REGISTER_31"
+                    "31",
+                    "$31"
                 ],
             ]
         }
     ],
+    "inputsInline": true,
     "output": "REGISTER",
     "colour": 180,
     "tooltip": "Register identifier",
@@ -164,7 +165,14 @@ Blockly.Blocks['type_register'] = {
 
 var typeLabelJson = {
     "type": "type_label",
-    "message0": ".",
+    "message0": ". %1",
+    "args0": [
+        {
+            "type": "field_input",
+            "name": "NAME",
+            "text": "label"
+        }
+    ],
     "inputsInline": true,
     "output": "LABEL",
     "colour": 285,
@@ -175,9 +183,6 @@ var typeLabelJson = {
 Blockly.Blocks['type_label'] = {
     init: function () {
         this.jsonInit(typeLabelJson);
-
-        var dropdown = new Blockly.FieldDropdown(Blockly.quanta.getAllLabels);
-        this.appendDummyInput().appendField(dropdown, 'LABEL');
     }
 };
 
@@ -303,7 +308,10 @@ var instructionSingleRegisterJson = {
         {
             "type": "input_value",
             "name": "REGISTER_A",
-            "check": "REGISTER"
+            "check": [
+                "REGISTER",
+                "LABEL"
+            ]
         }
     ],
     "inputsInline": true,
@@ -383,7 +391,10 @@ var instructionDoubleRegisterJson = {
         {
             "type": "input_value",
             "name": "REGISTER_B",
-            "check": "REGISTER"
+            "check": [
+                "REGISTER",
+                "LABEL"
+            ]
         }
     ],
     "inputsInline": true,
@@ -448,7 +459,10 @@ var instructionTripleRegisterJson = {
         {
             "type": "input_value",
             "name": "REGISTER_C",
-            "check": "REGISTER"
+            "check": [
+                "REGISTER",
+                "LABEL"
+            ]
         }
     ],
     "inputsInline": true,
@@ -473,7 +487,7 @@ Blockly.Blocks['instruction_triple_register'] = {
  */
 var labelGroupJson = {
     "type": "label_group",
-    "message0": "%1 %2 %3",
+    "message0": ". %1 %2 %3",
     "args0": [
         {
             "type": "field_input",
@@ -485,7 +499,7 @@ var labelGroupJson = {
         },
         {
             "type": "input_statement",
-            "name": "NAME"
+            "name": "STATEMENTS"
         }
     ],
     "previousStatement": null,
