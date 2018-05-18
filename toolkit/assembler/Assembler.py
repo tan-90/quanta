@@ -15,12 +15,16 @@ class Assembler:
         self.verbose = verbose
 
     def assemble(self, program):
-        self.log(self)
-
-        lines = program.split('\n')
+        lines = program.split('\n')   
         words = []
 
         for line in lines:
+            if ';' in line:
+                line = line[:line.index(';')]
+                
+            if len(line) == 0:
+                continue
+
             alias, args = self.parse(line)
             words.append(self.instructions[alias].assemble(args, self.arg_types, self.instruction_types))
         return words

@@ -1,10 +1,6 @@
-li $0, 0
-add $0, $1
-sub $0, $1
-and $0, $1
-jne $0, $1, $2
-not $0
-load $0, $2
-store $0, $2
-sl $1
-jl $1, $2, $3
+; default
+li $0, 4 ; comment
+li $1, 5
+li $2, 0
+li $3, 1
+mov $4, $0
