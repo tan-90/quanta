@@ -151,7 +151,7 @@ var typeRegisterJson = {
         }
     ],
     "output": "REGISTER",
-    "colour": 195,
+    "colour": 180,
     "tooltip": "Register identifier",
     "helpUrl": ""
 };
@@ -159,6 +159,25 @@ var typeRegisterJson = {
 Blockly.Blocks['type_register'] = {
     init: function () {
         this.jsonInit(typeRegisterJson);
+    }
+};
+
+var typeLabelJson = {
+    "type": "type_label",
+    "message0": ".",
+    "inputsInline": true,
+    "output": "LABEL",
+    "colour": 285,
+    "tooltip": "",
+    "helpUrl": ""
+}
+
+Blockly.Blocks['type_label'] = {
+    init: function () {
+        this.jsonInit(typeLabelJson);
+
+        var dropdown = new Blockly.FieldDropdown(Blockly.quanta.getAllLabels);
+        this.appendDummyInput().appendField(dropdown, 'LABEL');
     }
 };
 
@@ -171,13 +190,35 @@ Blockly.Blocks['type_register'] = {
  */
 
 /**
+ * NOOP instruction
+ * 
+ * No arguments, no function
+ */
+
+var instructionNoopJson = {
+    "type": "instruction_noop",
+    "message0": "NOOP",
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 0,
+    "tooltip": "",
+    "helpUrl": ""
+};
+
+Blockly.Blocks['instruction_noop'] = {
+    init: function () {
+        this.jsonInit(instructionNoopJson);
+    }
+};
+
+/**
  * Immediate instruction
  * 
  * Takes a single register and an immediate value
  */
 var instructionImmediateJson = {
     "type": "instruction_immediate",
-    "message0": "%1 %2 %3 A %4 Immediate %5",
+    "message0": "%1 %2 A %3 Immediate %4",
     "args0": [
         {
             "type": "field_dropdown",
@@ -193,19 +234,14 @@ var instructionImmediateJson = {
             "type": "input_dummy"
         },
         {
-            "type": "input_dummy"
-        },
-        {
             "type": "input_value",
             "name": "REGISTER_A",
-            "check": "REGISTER",
-            "align": "RIGHT"
+            "check": "REGISTER"
         },
         {
             "type": "input_value",
             "name": "IMMEDIATE",
-            "check": "Number",
-            "align": "RIGHT"
+            "check": "Number"
         }
     ],
     "inputsInline": true,
@@ -214,11 +250,73 @@ var instructionImmediateJson = {
     "colour": 230,
     "tooltip": "Single Register Immediate Instruction",
     "helpUrl": ""
-}
+};
 
 Blockly.Blocks['instruction_immediate'] = {
     init: function () {
         this.jsonInit(instructionImmediateJson);
+    }
+};
+
+/**
+ * Single register instruction
+ * 
+ * Takes one register
+ */
+var instructionSingleRegisterJson = {
+    "type": "instruction_single_register",
+    "message0": "%1 %2 A %3",
+    "args0": [
+        {
+            "type": "field_dropdown",
+            "name": "INSTRUCTION",
+            "options": [
+                [
+                    "not",
+                    "NOT"
+                ],
+                [
+                    "sl",
+                    "SL"
+                ],
+                [
+                    "sr",
+                    "SR"
+                ],
+                [
+                    "rl",
+                    "RL"
+                ],
+                [
+                    "rr",
+                    "RR"
+                ],
+                [
+                    "j",
+                    "JUMP"
+                ]
+            ]
+        },
+        {
+            "type": "input_dummy"
+        },
+        {
+            "type": "input_value",
+            "name": "REGISTER_A",
+            "check": "REGISTER"
+        }
+    ],
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 230,
+    "tooltip": "Single register instruction",
+    "helpUrl": ""
+};
+
+Blockly.Blocks['instruction_single_register'] = {
+    init: function () {
+        this.jsonInit(instructionSingleRegisterJson);
     }
 };
 
@@ -236,6 +334,18 @@ var instructionDoubleRegisterJson = {
             "type": "field_dropdown",
             "name": "INSTRUCTION",
             "options": [
+                [
+                    "mov",
+                    "MOV"
+                ],
+                [
+                    "load",
+                    "LOAD"
+                ],
+                [
+                    "store",
+                    "STORE"
+                ],
                 [
                     "add",
                     "ADD"
@@ -267,12 +377,12 @@ var instructionDoubleRegisterJson = {
         },
         {
             "type": "input_value",
-            "name": "DESTINATION",
+            "name": "REGISTER_A",
             "check": "REGISTER"
         },
         {
             "type": "input_value",
-            "name": "SOURCE",
+            "name": "REGISTER_B",
             "check": "REGISTER"
         }
     ],
@@ -291,25 +401,34 @@ Blockly.Blocks['instruction_double_register'] = {
 };
 
 /**
- * Single register instruction
+ * Triple register instruction
  * 
- * Takes one register
+ * Takes two registers
  */
-var instructionSingleRegisterJson = {
-    "type": "instruction_single_register",
-    "message0": "%1 %2 A %3",
+
+var instructionTripleRegisterJson = {
+    "type": "instruction_triple_register",
+    "message0": "%1 %2 A %3 B %4 C %5",
     "args0": [
         {
             "type": "field_dropdown",
             "name": "INSTRUCTION",
             "options": [
                 [
-                    "not",
-                    "NOT"
+                    "je",
+                    "JE"
                 ],
                 [
-                    "j",
-                    "JUMP"
+                    "jne",
+                    "JNE"
+                ],
+                [
+                    "jl",
+                    "JL"
+                ],
+                [
+                    "jg",
+                    "JG"
                 ]
             ]
         },
@@ -318,7 +437,17 @@ var instructionSingleRegisterJson = {
         },
         {
             "type": "input_value",
-            "name": "NAME",
+            "name": "REGISTER_A",
+            "check": "REGISTER"
+        },
+        {
+            "type": "input_value",
+            "name": "REGISTER_B",
+            "check": "REGISTER"
+        },
+        {
+            "type": "input_value",
+            "name": "REGISTER_C",
             "check": "REGISTER"
         }
     ],
@@ -326,13 +455,13 @@ var instructionSingleRegisterJson = {
     "previousStatement": null,
     "nextStatement": null,
     "colour": 230,
-    "tooltip": "Single register instruction",
+    "tooltip": "",
     "helpUrl": ""
 };
 
-Blockly.Blocks['instruction_single_register'] = {
+Blockly.Blocks['instruction_triple_register'] = {
     init: function () {
-        this.jsonInit(instructionSingleRegisterJson);
+        this.jsonInit(instructionTripleRegisterJson);
     }
 };
 
@@ -361,7 +490,7 @@ var labelGroupJson = {
     ],
     "previousStatement": null,
     "nextStatement": null,
-    "colour": 230,
+    "colour": 75,
     "tooltip": "Label block",
     "helpUrl": ""
 };
@@ -369,5 +498,32 @@ var labelGroupJson = {
 Blockly.Blocks['label_group'] = {
     init: function () {
         this.jsonInit(labelGroupJson);
+    }
+};
+
+var commentJson = {
+    "type": "comment",
+    "message0": ";  %1 %2",
+    "args0": [
+        {
+            "type": "input_dummy"
+        },
+        {
+            "type": "field_input",
+            "name": "COMMENT",
+            "text": "default"
+        }
+    ],
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 30,
+    "tooltip": "Comment",
+    "helpUrl": ""
+};
+
+Blockly.Blocks['comment'] = {
+    init: function () {
+        this.jsonInit(commentJson);
     }
 };

@@ -4,17 +4,20 @@
 <head>
     <meta charset="utf-8">
     <title>quanta blockly assembler</title>
-    <script src="google-blockly-7679d22/blockly_compressed.js"></script>
+    <script src="../../external/blockly/blockly_compressed.js"></script>
 
     <script src="generator/quanta.js"></script>
     <script src="generator/quanta/math.js"></script>
     <script src="generator/quanta/type.js"></script>
+    <script src="generator/quanta/value.js"></script>
     <script src="generator/quanta/instruction.js"></script>
 
-    <script src="google-blockly-7679d22/blocks_compressed.js"></script>
-    <script src="google-blockly-7679d22/msg/js/en.js"></script>
+    <script src="../../external/blockly/blocks_compressed.js"></script>
+    <script src="../../external/blockly/msg/js/en.js"></script>
 
-    <script src="quanta-blocks.js"></script>
+    <script src="quanta_blocks.js"></script>
+    <script src="quanta_listener.js"></script>
+
     <style>
         body {
             background-color: #282828;
@@ -26,16 +29,26 @@
 </head>
 
 <body>
-    <div id="blocklyDiv" style="height: 100vh; width: 100vw;"></div>
+    <div id="blocklyDiv" style="height: 90vh; width: 100vw;"></div>
     <xml id="toolbox" style="display: none">
-        <block type="type_register"></block>
-        <block type="instruction_immediate"></block>
-        <block type="instruction_double_register"></block>
-        <block type="instruction_single_register"></block>
-        <block type="label_group"></block>
-        <block type="math_number">
-            <field name="NUM">0</field>
-        </block>
+        <category name="Instruction">
+            <block type="instruction_noop"></block>
+            <block type="instruction_immediate"></block>
+            <block type="instruction_single_register"></block>
+            <block type="instruction_double_register"></block>
+            <block type="instruction_triple_register"></block>
+        </category>
+        <category name="Label">
+            <block type="type_label"></block>
+            <block type="label_group"></block>
+        </category>
+        <category name="Value">
+            <block type="type_register"></block>
+            <block type="math_number">
+                <field name="NUM">0</field>
+            </block>
+            <block type="comment"></block>
+        </category>
     </xml>
 
     <input id="generate-button" type="button" value="Generate!">
@@ -43,14 +56,16 @@
     <script>
         var workspace = Blockly.inject('blocklyDiv',
             {
-                media: 'google-blockly-7679d22/media/',
+                media: '../../external/blockly/media/',
                 toolbox: document.getElementById('toolbox'),
             });
+        
+        workspace.addChangeListener(listener);
 
-            document.getElementById('generate-button').addEventListener('click', function onGenerate() {
-                var code = Blockly.quanta.workspaceToCode(workspace);
-                alert(code);
-            });
+        document.getElementById('generate-button').addEventListener('click', function onGenerate() {
+            var code = Blockly.quanta.workspaceToCode(workspace);
+            alert(code);
+        });
     </script>
 </body>
 
