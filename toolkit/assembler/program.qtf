@@ -1,6 +1,15 @@
 ; default
+li $0, 4
+jl $4, $5, $8
 li $0, 4 ; comment
-li $1, 5
-li $2, 0
-li $3, 1
-mov $4, $0
+.two:
+    li $1, 5
+    li $2, 0
+    j .two
+    li $3, 1
+    je $4, $5, .six
+.six:
+    mov $4, $0
+    mov $4, $0
+.nine:
+    jne $4, $5, .six

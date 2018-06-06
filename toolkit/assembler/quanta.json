@@ -1,4 +1,11 @@
 {
+    "label_instructions": [
+        "j",
+        "je",
+        "jne",
+        "jl",
+        "jg"
+    ],
 	"arg_types": {
 		"register": {
             "regex": "\\$(\\d+)",
