@@ -29,7 +29,7 @@
 </head>
 
 <body>
-    <div id="blocklyDiv" style="height: 90vh; width: 100vw;"></div>
+    <div id="blocklyDiv" style="height: 96vh; width: 100vw;"></div>
     <xml id="toolbox" style="display: none">
         <category name="Instruction">
             <block type="instruction_noop"></block>
@@ -51,6 +51,8 @@
         </category>
     </xml>
 
+    <input id="save-button" type="button" value="Save">
+    <input id="load-button" type="button" value="Load">
     <input id="generate-button" type="button" value="Generate!">
 
     <script>
@@ -64,6 +66,19 @@
             var code = Blockly.quanta.workspaceToCode(workspace);
             
             console.log(code);
+        });
+
+        document.getElementById('save-button').addEventListener('click', function onGenerate() {
+            var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+            localStorage.setItem(prompt('Name of the project:', 'project'), Blockly.Xml.domToText(xml));
+            alert('Workspace successfully saved.');
+        });
+        document.getElementById('load-button').addEventListener('click', function onGenerate() {
+            var projectName = prompt('Name of the project:', 'project');
+            Blockly.mainWorkspace.clear();
+            var xml = Blockly.Xml.textToDom(localStorage.getItem(projectName));
+            Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+            alert('Workspace successfully restored.');
         });
     </script>
 </body>
