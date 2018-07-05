@@ -1,8 +1,15 @@
+# I use custom icons because I'm like that
 desktop.ini
-1311323620362868215713679186522244212124685.ico
-/toolkit/blockly/google-blockly-7679d22
-toolkit/assembler/__pycache__/
-toolkit/assembler/.vscode/
-toolkit/assembler/program.mif
 59782117335157561836117532433412115345637.ico
 1311323620362868215713679186522244212124951.ico
+
+# Ignore Visual Studio Code settings folder
+# It could be included once proper tasks are set up
+toolkit/assembler/.vscode/
+
+# Ignore pycache and assembler output
+toolkit/assembler/__pycache__/
+toolkit/assembler/program.mif
+
+
+

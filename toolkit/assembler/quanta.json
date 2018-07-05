@@ -4,7 +4,8 @@
         "je",
         "jne",
         "jl",
-        "jg"
+        "jg",
+        "call"
     ],
 	"arg_types": {
 		"register": {
@@ -17,6 +18,9 @@
         },
         "padding_3": {
             "length": 3
+        },
+        "padding_5": {
+            "length": 5
         },
         "padding_10": {
             "length": 10
@@ -45,6 +49,11 @@
         ],
         "jump": [
             "padding_10",
+            "register"
+        ],
+        "call": [
+            "register",
+            "padding_5",
             "register"
         ]
     },
@@ -195,6 +204,13 @@
             "alias": "jg",
             "opcode": 22,
             "type": "triple_register"
+        },
+        {
+            "name": "Call",
+            "description": "",
+            "alias": "call",
+            "opcode": 23,
+            "type": "call"
         }
     ]
 }
