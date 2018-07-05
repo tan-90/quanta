@@ -377,6 +377,10 @@ var instructionDoubleRegisterJson = {
                 [
                     "xnor",
                     "XNOR"
+                ],
+                [
+                    "call",
+                    "CALL"
                 ]
             ]
         },

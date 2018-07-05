@@ -24,6 +24,7 @@ Blockly.quanta['instruction_aliases'] = {
   "OR": 'or',
   "XOR": 'xor',
   "XNOR": 'xnor',
+  "CALL": 'call',
 
   "JE": 'je',
   "JNE": 'jne',
