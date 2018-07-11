@@ -11,5 +11,12 @@ toolkit/assembler/.vscode/
 toolkit/assembler/__pycache__/
 toolkit/assembler/program.mif
 
+# Ignore doxygen generated files
+doc/html/
+doc/latex/
 
+# Ignore modelsim project files
+hardware/modelsim/
 
+# Ignore test output
+hardware/test/out/
