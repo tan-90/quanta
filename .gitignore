@@ -11,5 +11,8 @@ toolkit/assembler/.vscode/
 toolkit/assembler/__pycache__/
 toolkit/assembler/program.mif
 
+# Ignore modelsim project folder
+hardware/modelsim/
 
-
+# Ignore test output folder
+hardware/test/out/
