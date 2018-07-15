@@ -13,13 +13,17 @@ def parse(source):
     generic_info = re.findall(r_generic, source)
     signal_info = re.findall(r_signal, source)
 
-    signals = []
-    for s in signal_info:
-        signals.append(Signal(s[0], s[1], s[2], s[3]))
-    
     generics = []
     for g in generic_info:
-        generics.append(Generic(g[0], g[1], g[2], g[3]))
+        generics.append(Generic(g[0] + '_g', g[1], g[2], g[3]))
 
-    libs = re.findall(r_lib, source)
+    signals = []
+    for s in signal_info:
+        signal_type = s[2]
+        for g in generics:
+            signal_type = signal_type.replace(g.name, g.default)
+
+        signals.append(Signal(s[0], s[1], signal_type, s[3]))
+
+    libs = [group[0] for group in re.findall(r_lib, source)]
     return Entity(name, signals, generics, libs)

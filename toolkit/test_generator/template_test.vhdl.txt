@@ -1,7 +1,10 @@
 --! @file
 --! @brief {name} testbench.
+{header}
 
+{block_s}
 {libs}
+{block_e}
 
 --! @brief Empty top level entity for testbench.
 entity {name}_test is
@@ -11,7 +14,10 @@ end entity {name}_test;
 --! @details Tests the {name} component given the input csv file.
 --! @details Outputs test results to the output file.
 architecture behavioral of {name}_test is
-    {signal_declarations}
+
+{block_s}
+{signal_declarations}
+{block_e}
     
     file file_in  : text; --! Input file.
     file file_out : text; --! Output file.
@@ -26,11 +32,19 @@ begin
     uut: entity work.{name}(behavioral)
     generic map
     (
-        {generic_map}
+
+{block_s}
+{generic_map}
+{block_e}
+
     )
     port map
     (
-        {port_map}
+
+{block_s}
+{port_map}
+{block_e}
+
     );
 
     --! @brief Test process.
@@ -40,8 +54,10 @@ begin
         variable separator_v  : character; -- Holds the input file separator_v.
         
         variable stream_out_v : line; --! Holds the string being built to write on output.
-        
-        {variable_declarations}
+
+{block_s}
+{variable_declarations}
+{block_e}
 
         variable test_count_v   : integer := 0; -- Holds the number of tests executed.
         variable passed_count_v : integer := 0; -- Holdes the number of tests passed.
@@ -68,17 +84,25 @@ begin
             readline(file_in, vector_v);
             
             -- Read test case inputs and expected output.
-            {read_case}
+{block_s}
+{read_case}
+{block_e}
             
 
             -- Set UUT input signals to test case inputs.
-            {signal_assignment}
+
+{block_s}
+{signal_assignment}
+{block_e}
 
             -- Wait for the signals to propagate.
             wait for CHECK_OUTPUT_DELAY;
             
-            -- Write test case inputs to output file.
-            {write_signal}
+            -- Write test case signals to output file.
+
+{block_s}
+{write_signal}
+{block_e}
             
             -- Check actual outputs against the expected ones.
             if {check_signal} then
@@ -89,7 +113,10 @@ begin
             else
                 -- Report a failed test to output file.
                 write(stream_out_v, string'(" -- Failed."));
-                {report_fail}
+
+{block_s}
+{report_fail}
+{block_e}
 
                 -- Report a failed test to simulation console.
                 report "Test " & integer'image(test_count_v) & " failed. Refer to output file: " & PATH_FILE_OUT & ".";

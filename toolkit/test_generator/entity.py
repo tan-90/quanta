@@ -42,7 +42,41 @@ class Entity:
             'signal_assignment': self.get_signal_assignement(),
             'write_signal': self.get_write_signal(),
             'check_signal': self.get_check_signal(),
+            'report_fail': self.get_report_fail()
         }
+
+    def get_testbench(self, template, path_file_in, path_file_out, header, block_s, block_e):
+        formatter = lambda l, j='\n': j.join(self.testbench_data[l])
+
+        _libs = formatter('libs')
+        _signal_declarations = formatter('signal_declarations')
+        _generic_map = formatter('generic_map')
+        _port_map = formatter('port_map', ',\n')
+        _variable_declarations = formatter('variable_declarations')
+        _read_case = formatter('read_case', '\nread(vector_v, separator_v); -- Read the comma to the separator variable to discard it.\n')
+        _signal_assignment = formatter('signal_assignment', ',\n')
+        _write_signal = formatter('write_signal', '\nwrite(stream_out_v, string\'(","));\n')
+        _check_signal = formatter('check_signal', ' and ')
+        _report_fail = formatter('report_fail')
+
+        return template.format(
+            header=header,
+            block_s=block_s,
+            block_e=block_e,
+            name=self.name,
+            libs=_libs,
+            signal_declarations=_signal_declarations,
+            path_file_in=path_file_in,
+            path_file_out=path_file_out,
+            generic_map=_generic_map,
+            port_map=_port_map,
+            variable_declarations=_variable_declarations,
+            read_case=_read_case,
+            signal_assignment=_signal_assignment,
+            write_signal=_write_signal,
+            check_signal=_check_signal,
+            report_fail=_report_fail
+        )
 
     def get_signal_declarations(self):
         signal_declatarion = []
@@ -57,8 +91,8 @@ class Entity:
         generic_map = []
 
         for generic in self.generics:
-            line = '{} => {} {}'.format(
-                generic.name, str(generic.default), generic.doxygen)
+            line = '{} => {}'.format(
+                generic.name, str(generic.default))
             generic_map.append(line)
         return generic_map
 
@@ -109,9 +143,8 @@ class Entity:
     def get_report_fail(self):
         report_fail = []
         for signal in [s for s in self.signals if s.direction == 'out']:
-            info_line = 'write(stream_out_v, string\'(" Expected {}: "));'.format(
-                signal.name)
+            info_line = 'write(stream_out_v, string\'(" Expected {}: "));'.format(signal.name)
             value_line = 'write(stream_out_v, {}_v );'.format(signal.name)
-            lines = '{}\n{}'.format(info_line, value_line)
+            lines = '{}\n{}\nwrite(stream_out_v, string\'("."));'.format(info_line, value_line)
             report_fail.append(lines)
         return report_fail
