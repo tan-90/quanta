@@ -7,8 +7,11 @@ desktop.ini
 # It could be included once proper tasks are set up
 toolkit/assembler/.vscode/
 
-# Ignore pycache and assembler output
+# Ignore pycache
 toolkit/assembler/__pycache__/
+toolkit/test_generator/__pycache__/
+
+# Ignore assembler output
 toolkit/assembler/program.mif
 
 # Ignore doxygen generated files
