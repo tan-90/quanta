@@ -23,3 +23,7 @@ hardware/modelsim/
 
 # Ignore test output
 hardware/test/out/
+
+# Ignore node_modules and webpack output
+toolkit/wave_generator/node_modules/
+toolkit/wave_generator/dist/
