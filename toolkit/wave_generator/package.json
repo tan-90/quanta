@@ -2,9 +2,11 @@
   "name": "wave_generator",
   "version": "0.1.0",
   "description": "Wave editor for VHDL testing.",
-  "main": "index.js",
+  "main": "./dist/electron/main.js",
   "scripts": {
-    "start": "webpack-dev-server",
+    "start-react": "webpack-dev-server --config webpack.config.react.js",
+    "start-electron": "webpack --config webpack.config.electron.js && electron .",
+    "start": "concurrently \"npm run-script start-react\" \"wait-on http://localhost:9000/ && npm run-script start-electron\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "tan90",
@@ -12,13 +14,16 @@
   "dependencies": {
     "@types/react": "^16.4.6",
     "@types/react-dom": "^16.0.6",
+    "electron": "^2.0.5",
     "react": "^16.4.1",
     "react-dom": "^16.4.1"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.0",
+    "concurrently": "^3.6.0",
     "source-map-loader": "^0.2.3",
     "typescript": "^2.9.2",
+    "wait-on": "^2.1.0",
     "webpack": "^4.16.1",
     "webpack-cli": "^3.0.8"
   }

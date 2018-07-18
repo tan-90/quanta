@@ -1,17 +1,17 @@
 module.exports = {
     devServer: {
         contentBase: [
-            __dirname + "/src/",
+            __dirname + "/src/react/",
             __dirname + "/node_modules/"
         ],
         inline: true,
         port: 9000
     },
     mode: "development",
-    entry: __dirname + "/src/index.tsx",
+    entry: __dirname + "/src/react/index.tsx",
     output: {
         filename: "bundle.js",
-        path: __dirname + "/dist"
+        path: __dirname + "/dist/react/"
     },
 
     // Enable sourcemaps for debugging webpack's output.
