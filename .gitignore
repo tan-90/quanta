@@ -5,10 +5,13 @@ desktop.ini
 
 # Ignore Visual Studio Code settings folder
 # It could be included once proper tasks are set up
-toolkit/assembler/.vscode/
+.vscode/
 
 # Ignore pycache and assembler output
 toolkit/assembler/__pycache__/
+toolkit/test_generator/__pycache__/
+
+# Ignore assembler output
 toolkit/assembler/program.mif
 
 # Ignore modelsim project folder
@@ -16,3 +19,17 @@ hardware/modelsim/
 
 # Ignore test output folder
 hardware/test/out/
+
+# Ignore doxygen generated files
+doc/html/
+doc/latex/
+
+# Ignore test output
+hardware/test/out/
+
+# Ignore node_modules and webpack output
+toolkit/wave_generator/node_modules/
+toolkit/wave_generator/dist/
+
+# Ignore css TypeScript modules
+*.d.ts

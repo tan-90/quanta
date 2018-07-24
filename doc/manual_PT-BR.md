@@ -1,3 +1,54 @@
+### Instruções
+
+#### NOOP
+
+| Alias | Instrução | Descrição                                            |
+| ----- | --------- | ---------------------------------------------------- |
+| noop  | noop      | Instrução em branco. Não afeta o estado do programa. |
+
+#### Um Registrador
+
+| Alias | Instrução | Descrição                                                |
+| ----- | :-------- | -------------------------------------------------------- |
+| not   | `not $r`  | Não lógico em `$r` e armazena em `$r`                    |
+| sl    | `sl $r`   | Shift lógico à esquerda em `$r` e armazena em `$r`.      |
+| asl   | `asl $r`  | Shift aritimético à esquerda em `$r` e armazena em `$r`. |
+| sr    | `sr $r`   | Shift lógico à direita em `$r` e armazena em `$r`.       |
+| rl    | `rl $r`   | Rotação à esquerda em `$r` e armazena em `$r`.           |
+| rr    | `rr $r`   | Rotação à direita em `$r` e armazena em `$r`.            |
+
+#### Dois Registradores
+
+| Alias | Instrução     | Descrição                            |
+| ----- | ------------- | ------------------------------------ |
+| move  | `move $r, $s` | Copia o conteúdo de `$s` para `$r`.  |
+| add   | `add $r, $s`  | Soma `$r`e `$s`e armazena em `$r`.   |
+| sub   | `sub $r, $s`  | Subtrai`$r`e `$s`e armazena em `$r`. |
+| and   | `and $r, $s`  | AND `$r`e `$s`e armazena em `$r`.    |
+| or    | `or $r, $s`   | OR `$r`e `$s`e armazena em `$r`.     |
+| xor   | `xor $r, $s`  | XOR `$r`e `$s`e armazena em `$r`.    |
+| xnor  | `xnor $r, $s` | XNOR `$r`e `$s`e armazena em `$r`.   |
+
+#### Jump
+
+| Alias | Instrução        | Descrição                                                    |
+| ----- | ---------------- | ------------------------------------------------------------ |
+| j     | `j $r`           | Desvio incondicional para o endereço em `$r`.                |
+| je    | `je $r, $s, $t`  | Desvio condicional para `$t` quando `$r` é igual a `$s`.     |
+| jne   | `jne $r, $s, $t` | Desvio condicional para `$t` quando `$r` não é igual a `$s`. |
+| jl    | `jl $r, $s, $t`  | Desvio condicional para `$t` quando `$r` é menor que `$s`.   |
+| jg    | `jg $r, $s, $t`  | Desvio condicional para `$t` quando `$r` é maior que `$s`.   |
+| call  | `call $r, $s`    | Desvio para `$s`armazenando PC em `$r`.                      |
+
+#### Memória
+
+| Alias | Instrução     | Descrição                                                    |
+| ----- | ------------- | ------------------------------------------------------------ |
+| load  | `load $r, $s` | Carrega o conteúdo no endereço de memória em `$r` para `$s`. |
+| store | `load $r, $s` | Armazena o conteúdo de `$r` no endereço de memória em `$s`.  |
+
+## Guia
+
 A linguagem assembly aceita pelo processador é baseada na linguagem assembly MIPS, com pequenas alterações. O guia para programadores familiares com MIPS é uma forma rápida de aprender a linguagem. O guia completo é destinado a programadores com pouca ou nenhuma familiaridade com assembly ou programação em si.
 
 ### Guia para programadores MIPS
@@ -28,13 +79,13 @@ O bloco correspondente a instruções do tipo immediate pode ser encontrado no m
 
 A sintaxe das instruções do tipo immediate em assembly é dada por `INSTRUÇÃO $destino, immediate`. O código da instrução é especificado por meio da palavra `li`, o endereço do registrador de destino é dado por um número logo após o `$`, e o valor a ser carregado é simplesmente um valor numérico inteiro.
 
-`; Constante 0`
-`li $0, 0`
-`; Constante 1`
-`li $1, 1`
-`; Ponteiro da stack`
-`li $29, 512`
-`; Registrador de retorno`
+`; Constante 0`  
+`li $0, 0`  
+`; Constante 1`  
+`li $1, 1`  
+`; Ponteiro da stack`  
+`li $29, 512`  
+`; Registrador de retorno`  
 `li $30, 0`
 
 #### Operações simples
@@ -64,23 +115,23 @@ O bloco correspondente a instruções de operação em registradores pode ser en
 
 A sintaxe das instruções de operação em registradores em assembly é dada por `INSTRUÇÃO $destino/origem, $origem`. O código da instrução é especificado por meio da palavra correspondente (`add` ou `sub` nesse exemplo), o endereço do registrador de destino/origem é dado por um número logo após o `$`, assim como o endereço do registrador de origem.
 
-`; Calcular 42 + 3 - (14 - 15)`
-`; Carregar os valores em registradores`
-`li $0, 42`
-`li $1, 3`
-`li $2, 14`
-`li $3, 15`
-`; Calcular (14 - 15)`
-`; Subtrai os registradores 2 e 3`
-`; (e salva o resultado no registrador 2)`
-`sub $2, $3`
-`; Calcular 42 + 3`
-`; Soma os registradores 0 e 1`
-`; (e salva o resultado no registrador 0)`
-`add $0, $1`
-`; Calcular o valor final`
-`; Subtrai os registradores 0 e 2`
-`; (e salva o resultado no registrador 0)`
+`; Calcular 42 + 3 - (14 - 15)`  
+`; Carregar os valores em registradores`  
+`li $0, 42`  
+`li $1, 3`  
+`li $2, 14`  
+`li $3, 15`  
+`; Calcular (14 - 15)`  
+`; Subtrai os registradores 2 e 3`  
+`; (e salva o resultado no registrador 2)`  
+`sub $2, $3`  
+`; Calcular 42 + 3`  
+`; Soma os registradores 0 e 1`  
+`; (e salva o resultado no registrador 0)`  
+`add $0, $1`  
+`; Calcular o valor final`  
+`; Subtrai os registradores 0 e 2`  
+`; (e salva o resultado no registrador 0)`  
 `sub $0, $2`
 
 #### Copiando valores
@@ -109,15 +160,15 @@ O bloco correspondente a instrução de cópia pode ser encontrado no menu de in
 
 A sintaxe da instrução de cópia de registradores em assembly é dada por `INSTRUÇÃO $destino, $origem`. O código da instrução é especificado por meio da palavra `mov`, o endereço do registrador de destino é dado por um número logo após o `$`, assim como o endereço do registrador de origem (a ordem é importante).
 
-`; Carregar os valores em registradores`
-`li $0, 2`
-`li $1, 5`
-`li $2, 4`
-`; Copiar o registrador 0 para o registrador 3`
-`mov $3, $0`
-`; Calcular 2 + 5`
-`add $0, ​$1`
-`; Calcular 2 + 4`
+`; Carregar os valores em registradores`  
+`li $0, 2`  
+`li $1, 5`  
+`li $2, 4`  
+`; Copiar o registrador 0 para o registrador 3`  
+`mov $3, $0`  
+`; Calcular 2 + 5`  
+`add $0, $1`  
+`; Calcular 2 + 4`  
 `sub $3, $2`
 
 #### Operações condicionais
@@ -156,17 +207,17 @@ A sintaxe da instrução de desvio em assembly é dada por `INSTRUÇÃO $origen,
 
 As labels que definem pontos específicos no código são compostas por um identificador seguido de `:`. Uma convenção útil (mas não obrigatória) é indentar todas as linhas abaixo de uma label com quatro espaços.
 
-`; Carregar os valores em registradores`
-`li $0, 0`
-`li $1, 1`
-`li $2, 3`
-`li $3, 4`
-`; Início de uma soma consecutiva`
-`soma:`
-      `; Somar 4 no resultado`
-      `add $4, $3`
-      `; Subtrair 1 do contador de somas`
-      `sub $1, $2`
+`; Carregar os valores em registradores`  
+`li $0, 0`  
+`li $1, 1`  
+`li $2, 3`  
+`li $3, 4`  
+`; Início de uma soma consecutiva`  
+`soma:`  
+      `; Somar 4 no resultado`  
+      `add $4, $3`  
+      `; Subtrair 1 do contador de somas`  
+      `sub $1, $2`  
       `jne $2, $0, soma`
 
 #### Subrotinas
@@ -189,21 +240,21 @@ O bloco correspondente a instrução de chamada de subrotina pode ser encontrado
 
 A sintaxe da instrução de chamada de subrotina em assembly é dada por `INSTRUÇÃO $destino, label`. O código da instrução é especificado por meio da palavra `call`, o registrador destino do endereço de retorno é dado pelo número logo após o `$` e o nome da subrotina é dado por um identificador com o mesmo nome da label correspondente.
 
-`; Carregar os valores em registradores`
-`li $0, 0`
-`li $1, 1`
-`li $2, 3`
-`li $3, 4`
-`; Chamar subrotina de multiplicação`
-`call $30, .mul`
-`; Desviar para o final do programa`
-`j end`
-`; Multiplicação`
-`mul:`
-      `add $4, $3`
-      `sub $2, $1`
-      `jne $4, $0, .mul`
-      `j $30`
+`; Carregar os valores em registradores`  
+`li $0, 0`  
+`li $1, 1`  
+`li $2, 3`  
+`li $3, 4`  
+`; Chamar subrotina de multiplicação`  
+`call $30, .mul`  
+`; Desviar para o final do programa`  
+`j end`  
+`; Multiplicação`  
+`mul:`  
+      `add $4, $3`  
+      `sub $2, $1`  
+      `jne $4, $0, .mul`  
+      `j $30`  
 
 `end:`
 
