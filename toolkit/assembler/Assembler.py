@@ -1,3 +1,4 @@
+import argparse
 import json
 import re
 
@@ -110,8 +111,12 @@ class Assembler:
         json_str = strip_line(json_str)
         return json.loads(json_str)
 
+parser = argparse.ArgumentParser()
+parser.add_argument('program', help='The path to the file to assemble.', type=str)
+parser.add_argument('mif', help='The path to save the assembled file.', type=str)
+args = parser.parse_args()
+
 q = Assembler(Assembler.params_from_file('quanta.json'))
-# bits = q.assemble(read_file('program.qtf'))
-bits = q.assemble(read_file('C:\\Vinicius\\quanta\\Software\\Toolkit\\Assembler\\out\\artifacts\\Assembler_jar\\Label.qtf'))
+bits = q.assemble(read_file(args.program))
 mif = MIF(32, 256, 'BIN', 'BIN', bits)
-write_file('C:\\Vinicius\\quanta\\Hardware\\quanta2\\quanta2inst.mif', mif.as_file())
+write_file(args.mif, mif.as_file())
