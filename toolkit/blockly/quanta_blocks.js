@@ -165,7 +165,7 @@ Blockly.Blocks['type_register'] = {
 
 var typeLabelJson = {
     "type": "type_label",
-    "message0": ". %1",
+    "message0": "%1",
     "args0": [
         {
             "type": "field_input",
@@ -491,7 +491,7 @@ Blockly.Blocks['instruction_triple_register'] = {
  */
 var labelGroupJson = {
     "type": "label_group",
-    "message0": ". %1 %2 %3",
+    "message0": "%1 %2 %3",
     "args0": [
         {
             "type": "field_input",
