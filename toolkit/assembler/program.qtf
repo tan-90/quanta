@@ -6,9 +6,9 @@ li $1, 1
 li $2, 3
 li $10, 0
 
-mov $4, $20
+move $4, $20
 call $30, mul
-mov $16, $10
+move $16, $10
 j end
 
 mul:

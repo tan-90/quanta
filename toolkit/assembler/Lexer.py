@@ -14,12 +14,12 @@ reserved = {
 
     'li': 'IMMEDIATE',
 
-    'not': 'REG',
-    'sl': 'REG',
-    'asl': 'REG',
-    'sr': 'REG',
-    'rl': 'REG',
-    'rr': 'REG',
+    'not': 'SINGLE_REG',
+    'sl': 'SINGLE_REG',
+    'asl': 'SINGLE_REG',
+    'sr': 'SINGLE_REG',
+    'rl': 'SINGLE_REG',
+    'rr': 'SINGLE_REG',
 
     'move': 'DOUBLE_REG',
     'add': 'DOUBLE_REG',
@@ -36,14 +36,16 @@ reserved = {
     'jl': 'BRANCH',
     'jg': 'BRANCH',
 
-    'call': 'CALL'
+    'call': 'CALL',
+
+    'load': 'MEMORY',
+    'store': 'MEMORY'
 }
 
 ## @brief Token list.
 ## @brief The common  tokens and the unique values for the instruction types.
 tokens = (
     'COMMENT',
-    
     'COMMA',
     'DOLLAR_SIGN',
     'COLON',
@@ -60,7 +62,7 @@ t_NUMBER = r'[0-9][0-9]*'
 t_ignore = ' \t'
 
 def t_COMMENT(t):
-    r'\;.*'
+    r';.*'
     pass
 
 def t_IDENTIFIER(t):
@@ -79,15 +81,3 @@ def t_error(t):
 
 # Build the lexer
 lexer = lex.lex()
-
-data = ''
-with open('program.qtf', 'r') as file:
-    data = file.read()
-
-lexer.input(data)
-# Tokenize
-while True:
-    tok = lexer.token()
-    if not tok:
-        break      # No more input
-    print(tok.type, tok.value, tok.lineno, tok.lexpos)
