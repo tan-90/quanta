@@ -1,11 +1,18 @@
+## @file Assembler parser.
+
+import os
+import sys
+
+sys.path.insert(1, os.path.join(sys.path[0], '../../external/ply/'))
 import ply.yacc as yacc
 
-from Lexer import tokens
+from Lexer import build_lexer, tokens
+import Util
 
-lines = None
-def save_line(line):
-    global lines
-    lines.append(line)
+# @brief holds the error log for the past parser run.
+# @details While ply recomends globals in this situation, a lexer class would look better.
+# @TODO Turn lexer and parser into classes
+error_log = None
 
 # A separate production for named registers allows delegating register naming to the Assembler.
 def p_named_reg(p):
@@ -80,25 +87,72 @@ def p_line(p):
             | label_id'''
     p[0] = (p.lineno(1), p[1])
 
-def p_lines(p):
-    '''lines : lines line
-             | empty'''
+def p_program(p):
+    '''program : program line
+               | empty'''
     if len(p) == 3:
-        save_line(p[2])
+        p.parser.lines.append(p[2])
 
 def p_empty(p):
     '''empty :'''
     pass
 
 def p_error(p):
-    print("Syntax error in input!")
-    print('    {}'.format(str(p)))
+    global error_log
+    # Save error information on the parser's error log.
+    error_log.append({
+        'lineno': p.lineno,
+        'column': Util.find_column(p)
+    })
     
 def parse(data):
-    global lines
-    lines = []
+    global error_log
+
+    # Create an error checker lexer.
+    # This is not optimal, but allows prettier error logs.
+    # A better way might be hiding in ply's huge docs.
+    lex_checker = build_lexer()
+    lex_checker.input(data)
+    while lex_checker.token():
+        pass
+    log = lex_checker.error_log
+
+    if len(log) > 0:
+        title = 'Assembler failed.\nUnexpected token{}:'
+        title = title.format('' if len(log) == 1 else 's')
+
+        # List to hold all error messages.
+        description = []
+        for error in log:
+            # Create error message.
+            error_pointer = 'line {}> '.format(error['lineno'])
+            line = data.split('\n')[error['lineno'] - 1]
+            message = Util.format_column_marker(line, error['column'], error_pointer)
+            description.append(message)
+
+        print(Util.format_error(title, '\n'.join(description)))
+        exit(-1)
 
     parser = yacc.yacc(start='lines')
-    parser.parse(data, tracking=True)
+    parser.lines = []
+    error_log = []
     
-    return lines
+    parser.parse(data, lexer=build_lexer(), tracking=True)
+
+    if len(error_log) > 0:
+        title = 'Assembler failed.\nSyntax error{}:'
+        title = title.format('' if len(error_log) == 1 else 's')
+
+        # List to hold all error messages.
+        description = []
+        for error in error_log:
+            # Create error message.
+            error_pointer = 'line {}> '.format(error['lineno'])
+            line = data.split('\n')[error['lineno'] - 1]
+            message = Util.format_column_marker(line, error['column'], error_pointer)
+            description.append(message)
+            
+        print(Util.format_error(title, '\n'.join(description)))
+        exit(-1)
+        
+    return parser.lines

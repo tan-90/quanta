@@ -3,8 +3,10 @@
 import os
 import sys
 
-sys.path.insert(1, os.path.join(sys.path[0], '../../external/ply/ply/'))
+sys.path.insert(1, os.path.join(sys.path[0], '../../external/ply/'))
 import ply.lex as lex
+
+import Util
 
 ## @brief Reserved word types.
 ## @details Holds every accepted instruction and the corresponding type.
@@ -79,8 +81,18 @@ def t_newline(t):
     t.lexer.lineno += len(t.value)
 
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
+    # Save error information on the lexer's error log.
+    t.lexer.error_log.append({
+        'lineno': t.lineno,
+        'column': Util.find_column(t)
+    })
+    # Discard the char that triggered the error to continue parsing.
     t.lexer.skip(1)
 
-# Build the lexer
-lexer = lex.lex()
+## @brief Builds the lexer.
+## @return The constructed lexer.
+def build_lexer():
+    lexer = lex.lex()
+    lexer.error_log = []
+
+    return lexer
