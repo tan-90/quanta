@@ -9,6 +9,9 @@ li $10, 0
 mov $4, $20
 call $30, .mul
 mov $16, $10
+mov $17, $10
+mov $18, $10
+mov $19, $10
 j .end
 
 .mul:
@@ -19,3 +22,4 @@ j .end
     j $30
 
 .end:
+    j .end
