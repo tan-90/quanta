@@ -1,3 +1,6 @@
 [submodule "external/blockly"]
 	path = external/blockly
 	url = https://github.com/google/blockly
+[submodule "external/ply"]
+	path = external/ply
+	url = https://github.com/dabeaz/ply.git

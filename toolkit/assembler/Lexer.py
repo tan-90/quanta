@@ -1,0 +1,93 @@
+## @file Assembler lexer.
+
+import os
+import sys
+
+sys.path.insert(1, os.path.join(sys.path[0], '../../external/ply/ply/'))
+import ply.lex as lex
+
+## @brief Reserved word types.
+## @details Holds every accepted instruction and the corresponding type.
+## @TODO Optimize this for easier localization.
+reserved = {
+    'noop': 'NOOP',
+
+    'li': 'IMMEDIATE',
+
+    'not': 'REG',
+    'sl': 'REG',
+    'asl': 'REG',
+    'sr': 'REG',
+    'rl': 'REG',
+    'rr': 'REG',
+
+    'move': 'DOUBLE_REG',
+    'add': 'DOUBLE_REG',
+    'sub': 'DOUBLE_REG',
+    'and': 'DOUBLE_REG',
+    'or': 'DOUBLE_REG',
+    'xor': 'DOUBLE_REG',
+    'xnor': 'DOUBLE_REG',
+
+    'j': 'JUMP',
+
+    'je': 'BRANCH',
+    'jne': 'BRANCH',
+    'jl': 'BRANCH',
+    'jg': 'BRANCH',
+
+    'call': 'CALL'
+}
+
+## @brief Token list.
+## @brief The common  tokens and the unique values for the instruction types.
+tokens = (
+    'COMMENT',
+    
+    'COMMA',
+    'DOLLAR_SIGN',
+    'COLON',
+
+    'IDENTIFIER',
+    'NUMBER'
+) + tuple(set(reserved.values()))
+
+t_COMMA = r'\,'
+t_DOLLAR_SIGN = r'\$'
+t_COLON = r'\:'
+t_NUMBER = r'[0-9][0-9]*'
+
+t_ignore = ' \t'
+
+def t_COMMENT(t):
+    r'\;.*'
+    pass
+
+def t_IDENTIFIER(t):
+    r'[a-zA-z_][a-zA-Z0-9_]*'
+    # Check if match is a reserved word.
+    t.type = reserved.get(t.value, 'IDENTIFIER')
+    return t
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
+def t_error(t):
+    print("Illegal character '%s'" % t.value[0])
+    t.lexer.skip(1)
+
+# Build the lexer
+lexer = lex.lex()
+
+data = ''
+with open('program.qtf', 'r') as file:
+    data = file.read()
+
+lexer.input(data)
+# Tokenize
+while True:
+    tok = lexer.token()
+    if not tok:
+        break      # No more input
+    print(tok.type, tok.value, tok.lineno, tok.lexpos)
