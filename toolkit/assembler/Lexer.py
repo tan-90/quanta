@@ -16,7 +16,7 @@ reserved = {
 
     'not': 'SINGLE_REG',
     'sl': 'SINGLE_REG',
-    'asl': 'SINGLE_REG',
+    'asr': 'SINGLE_REG',
     'sr': 'SINGLE_REG',
     'rl': 'SINGLE_REG',
     'rr': 'SINGLE_REG',
@@ -45,7 +45,6 @@ reserved = {
 ## @brief Token list.
 ## @brief The common  tokens and the unique values for the instruction types.
 tokens = (
-    'COMMENT',
     'COMMA',
     'DOLLAR_SIGN',
     'COLON',
@@ -57,7 +56,6 @@ tokens = (
 t_COMMA = r'\,'
 t_DOLLAR_SIGN = r'\$'
 t_COLON = r'\:'
-t_NUMBER = r'[0-9][0-9]*'
 
 t_ignore = ' \t'
 
@@ -69,6 +67,11 @@ def t_IDENTIFIER(t):
     r'[a-zA-z_][a-zA-Z0-9_]*'
     # Check if match is a reserved word.
     t.type = reserved.get(t.value, 'IDENTIFIER')
+    return t
+
+def t_NUMBER(t):
+    r'[0-9][0-9]*'
+    t.value = int(t.value)
     return t
 
 def t_newline(t):

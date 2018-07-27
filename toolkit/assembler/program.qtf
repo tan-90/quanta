@@ -6,7 +6,9 @@ li $1, 1
 li $2, 3
 li $10, 0
 
+
 move $4, $20
+not $10
 call $30, mul
 move $16, $10
 j end
@@ -17,5 +19,15 @@ mul:
 
     jne $4, $0, mul
     j $30
-
+    jne $0, $1, end
 end:
+call $0, mul
+call $0, div
+mul:
+div:
+
+load $0, $1
+load $0, $ra
+call $0, ra
+
+ra:

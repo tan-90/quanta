@@ -1,122 +1,214 @@
-import argparse
-import json
-import re
+from Parser import parse
 
-from Instruction import Instruction
-from MIF import MIF
-from Util import read_file, strip_line, write_file
+## @brief Holds information about an instruction
+## @details Used for defining instruction information for the assembler
+class Instruction:
+    def __init__(self, name, type, opcode, alias, description):
+        ## @brief Human frindly name of the instruction
+        self.name = name
+        ## @brief The instruction type for the lexer.
+        self.type = type
+        ## @brief The instruction OPCODE for the Assembler.
+        self.opcode = opcode
 
-class Assembler:
-    def __init__(self, params, verbose=False):
-        self.arg_types = params['arg_types']
-        self.instruction_types = params['instruction_types']
-        self.label_instructions = params['label_instructions']
+        ## @brief The instruction alias for the lexer.
+        self.alias = alias
+        ## @brief Human friendly instruction descrption for verbose assembling.
+        self.description = description
 
-        self.instructions = {attribs['alias']: Instruction(attribs) for attribs in params['instructions']}
-        
-        self.verbose = verbose
-
-    def assemble(self, program):
-        lines = program.split('\n')
-        lines = Assembler.preprocess_lines(lines)
-
-        lines = self.expand_labels(lines)
+## @brief The quanta instruction set.
+instructions = [
     
-        words = []       
+    Instruction('NOOP', 'NOOP', 0x00, 'noop', ''),
 
-        for line in lines:
-            alias, args = self.parse(line)
-            words.append(self.instructions[alias].assemble(args, self.arg_types, self.instruction_types))
-        return words
+    Instruction('Load Immediate', 'IMMEDIATE', 0x01, 'li', ''),
+    
+    Instruction('Not', 'SINGLE_REG', 0x0b, 'not', ''),
+    Instruction('Shift Left', 'SINGLE_REG', 0x0c, 'sl', ''),
+    Instruction('Arithmetic Shift Right', 'SINGLE_REG', 0x0f, 'asr', ''),
+    Instruction('Shift Right', 'SINGLE_REG', 0x0d, 'sr', ''),
+    Instruction('Rotate Left', 'SINGLE_REG', 0x10, 'rl', ''),
 
-    def expand_labels(self, lines):
-        instruction_index = 0
-        processed_lines = []
-        labels = {}
+    Instruction('Move', 'DOUBLE_REG', 0x02, 'move', ''),
+    Instruction('Add', 'DOUBLE_REG', 0x05, 'add', ''),
+    Instruction('Subtract', 'DOUBLE_REG', 0x06, 'sub', ''),
+    Instruction('AND', 'DOUBLE_REG', 0x07, 'and', ''),
+    Instruction('OR', 'DOUBLE_REG', 0x08, 'or', ''),
+    Instruction('XOR', 'DOUBLE_REG', 0x09, 'xor', ''),
+    Instruction('XNOR', 'DOUBLE_REG', 0x0a, 'xnor', ''),
 
-        for line in lines:            
-            if line.startswith('.'):
-                labels[line[1:-1]] = instruction_index
-            else:
-                processed_lines.append(line)
-                separator = line.index(' ')
-                alias = line[:separator]
+    Instruction('Jump', 'JUMP', 0x0a, 'j', ''),
 
-                if '.' in line and alias in self.label_instructions:
-                    instruction_index += 2
-                else:
-                    instruction_index += 1
-        
-        lines = list(processed_lines)
-        processed_lines = []
-        for line in lines:
-            separator = line.index(' ')
-            alias = line[:separator]
+    Instruction('Jump Equals', 'BRANCH', 0x13, 'je', ''),
+    Instruction('Jump Not Equals', 'BRANCH', 0x14, 'jne', ''),
+    Instruction('Jump Lesser', 'BRANCH', 0x15, 'jl', ''),
+    Instruction('Jump Greater', 'BRANCH', 0x16, 'jg', ''),
 
-            if '.' in line and alias in self.label_instructions:
-                separator = line.index('.')
-                label = line[separator + 1:]
-                
-                processed_lines.append('li $31, ' + str(labels[label]))
-                processed_lines.append(line[:separator] + '$31')
-            else:
-                processed_lines.append(line)
+    Instruction('Call', 'CALL', 0x17, 'call', ''),
 
-        return processed_lines
+    Instruction('Load', 'MEMORY', 0x03, 'load', ''),
+    Instruction('Store', 'MEMORY', 0x04, 'store', '')
+]
+## @brief Maps aliases to instruction classes.
+## @details Avoids searchs in the instruction set.
+instruction_aliases = {i.alias: i for i in instructions }
 
-    @staticmethod
-    def preprocess_lines(lines):
-        processed_lines = []
+## @brief Sintax sugar. Maps register names to their value.
+## @details Register aliases won't collide with labels.
+register_aliases = {
+    'zero': 0,
+    'ra': 30,
+    'a': 31
+}
 
-        for line in lines:
-            if ';' in line:
-                line = line[:line.index(';')]
+## @brief Checks if an instruction is using a label as argument.
+## @details Label instructions translate to more then one instruction.
+## @details Querying the type is needed when counting instructions.
+## @param line The entire parsed line.
+## @return Wether or not the instruction uses a label argument.
+def is_label_instruction(line):
+    instruction = instruction_aliases[line[0]]
+    args = line[1]
 
-            while line.startswith(' '):
-                line = line[1:]
+    result = False
+    result |= instruction.type == 'JUMP'   and isinstance(args[0], str)
+    result |= instruction.type == 'BRANCH' and isinstance(args[2], str)
+    result |= instruction.type == 'CALL'   and isinstance(args[1], str)
+
+    return result
+
+## @brief Creates a map of label identifiers to the corresponding instructions.
+## @param lines The output of the parser.
+## @return A map of labels and their corresponding instruction.
+def parse_labels(lines):
+    labels = {}
+    
+    index = 0
+    for _, line in lines:
+        is_label = instruction_aliases.get(line[0], 'LABEL') == 'LABEL'
+        if is_label:
+            labels[line[0]] = index
+        else:
+            index += 2 if is_label_instruction(line) else 1
+    
+    return labels
+
+## @brief Assembles a parsed program into binary words.
+## @param lines The output of the parser.
+## @return A list of the binary words corresponding to the input program.
+def assemble(lines):
+    word_length = 32
+    opcode_length = 8
+    reg_length = 5
+
+    reserved_reg = 31
+    instruction_li = [i for i in instructions if i.alias == 'li'][0]
+
+    def translate_named_regs(reg):
+        if isinstance(reg, tuple):
+            return register_aliases[reg[0]]
+        return reg
+
+    def load_reserved_reg(address):
+        word  = to_fixed_length_bin(instruction_li.opcode, opcode_length) # OPCODE
+        word += to_fixed_length_bin(reserved_reg, reg_length)             # REGISTER
+        word += to_fixed_length_bin(0, 3)                                 # PADDING
+        word += to_fixed_length_bin(address, 16)                          # IMMEDIATE
+        return word
+
+    def to_fixed_length_bin(num, length):
+        return str(bin(num))[2:].zfill(length)
+    
+    labels = parse_labels(lines)
+    words = []
+
+    index = 0
+    for _, line in lines:
+        is_label = instruction_aliases.get(line[0], 'LABEL') == 'LABEL'
+        if not is_label:
+            instruction = instruction_aliases[line[0]]
+            args = tuple([translate_named_regs(reg) for reg in line[1]])
             
-            if len(line) == 0:
-                continue
-            else:
-                processed_lines.append(line)
+            if instruction.type == 'NOOP':
+                word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
+                word += to_fixed_length_bin(0, 24)                             # FILL
+                words.append(word)
 
-        return processed_lines
+
+            elif instruction.type == 'IMMEDIATE':
+                word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
+                word += to_fixed_length_bin(args[0], reg_length)               # REGISTER
+                word += to_fixed_length_bin(0, 3)                              # PADDING
+                word += to_fixed_length_bin(args[1], 16)                       # IMMEDIATE
+                words.append(word)
+
+            elif instruction.type == 'SINGLE_REG':
+                word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
+                word += to_fixed_length_bin(args[0], reg_length)               # REGISTER
+                word += to_fixed_length_bin(0, 19)                             # FILL
+                words.append(word)
+
+            elif instruction.type == 'DOUBLE_REG' or instruction.type == 'MEMORY':
+                word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
+                word += to_fixed_length_bin(args[0], reg_length)               # REGISTER
+                word += to_fixed_length_bin(args[1], reg_length)               # REGISTER
+                word += to_fixed_length_bin(0, 14)                             # FILL
+                words.append(word)
+
+            elif instruction.type == 'JUMP':
+                is_label_jump = isinstance(args[0], str)
+                # Checks for a jump to label instruction
+                if is_label_jump:
+                    # Load the address to the reserved register
+                    word = load_reserved_reg(labels[args[0]])
+                    words.append(word)
+                
+                destination = reserved_reg if is_label_jump else args[0]
+                word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
+                word += to_fixed_length_bin(0, 10)                             # PADDING
+                word += to_fixed_length_bin(destination, reg_length)           # REGISTER
+                word += to_fixed_length_bin(0, 9)                              # FILL
+                words.append(word)
+            elif instruction.type == 'BRANCH':
+                is_label_branch = isinstance(args[2], str)
+                # Checks for a jump to label instruction
+                if is_label_branch:
+                    # Load the address to the reserved register
+                    word = load_reserved_reg(labels[args[2]])
+                    words.append(word)
+                
+                destination = reserved_reg if is_label_branch else args[2]
+                word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
+                word += to_fixed_length_bin(args[0], reg_length)               # REGISTER
+                word += to_fixed_length_bin(args[1], reg_length)               # REGISTER
+                word += to_fixed_length_bin(destination, reg_length)           # REGISTER
+                word += to_fixed_length_bin(0, 9)                              # FILL
+                words.append(word)
+
+            elif instruction.type == 'CALL':
+                is_label_call = isinstance(args[1], str)
+                # Checks for a jump to label instruction
+                if is_label_call:
+                    # Load the address to the reserved register
+                    word = load_reserved_reg(labels[args[1]])
+                    words.append(word)
+
+                destination = reserved_reg if is_label_call else args[1]
+                word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
+                word += to_fixed_length_bin(args[0], reg_length)               # REGISTER
+                word += to_fixed_length_bin(0, 5)                              # PADDING
+                word += to_fixed_length_bin(destination, reg_length)           # REGISTER
+                word += to_fixed_length_bin(0, 9)                              # FILL
+                words.append(word)
+            
+            index += 2 if is_label_instruction(line) else 1
     
-    def parse(self, line):
-        separator = line.index(' ')
-        alias = line[:separator]
-        line_type = self.instructions[alias].type
-        
-        args = []
-        separator = 0
-        for arg in self.instruction_types[line_type]:
-            if(arg.startswith('padding_')):
-                args.append(0)
-            else:
-                separator += 2 + line[separator + 1:].index(' ')
-                value = re.findall(self.arg_types[arg]['regex'], line[separator:])[0]
-                args.append(value)
-        return alias, args
+    return words           
 
-    def __str__(self):
-        return 'arg_types: ' + str(self.arg_types) + ', instructions: ' + str(self.instructions)
 
-    def log(self, message):
-        if self.verbose:
-            print(message)
-
-    @staticmethod
-    def params_from_file(path):
-        json_str = read_file(path)
-        json_str = strip_line(json_str)
-        return json.loads(json_str)
-
-parser = argparse.ArgumentParser()
-parser.add_argument('program', help='The path to the file to assemble.', type=str)
-parser.add_argument('mif', help='The path to save the assembled file.', type=str)
-args = parser.parse_args()
-
-q = Assembler(Assembler.params_from_file('quanta.json'))
-bits = q.assemble(read_file(args.program))
-mif = MIF(32, 256, 'BIN', 'BIN', bits)
-write_file(args.mif, mif.as_file())
+data = ''
+with open('program.qtf', 'r') as file:
+    data = file.read()
+from pprint import pprint
+pprint(parse(data))
+pprint(assemble(parse(data)))
