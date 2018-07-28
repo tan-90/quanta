@@ -1,4 +1,5 @@
-## @file Assembler parser.
+## @file
+## @brief Assembler parser.
 
 import os
 import sys
@@ -133,7 +134,7 @@ def parse(data):
         print(Util.format_error(title, '\n'.join(description)))
         exit(-1)
 
-    parser = yacc.yacc(start='lines')
+    parser = yacc.yacc(start='program')
     parser.lines = []
     error_log = []
     
@@ -151,7 +152,7 @@ def parse(data):
             line = data.split('\n')[error['lineno'] - 1]
             message = Util.format_column_marker(line, error['column'], error_pointer)
             description.append(message)
-            
+
         print(Util.format_error(title, '\n'.join(description)))
         exit(-1)
         

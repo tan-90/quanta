@@ -1,4 +1,5 @@
-## @file Assembler lexer.
+## @file
+## @brief Assembler lexer.
 
 import os
 import sys
