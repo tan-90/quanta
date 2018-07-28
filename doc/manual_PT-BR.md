@@ -12,7 +12,13 @@
 
 | Alias | Instrução | Descrição                                            |
 | ----- | --------- | ---------------------------------------------------- |
-| noop  | noop      | Instrução em branco. Não afeta o estado do programa. |
+| noop  | `noop`    | Instrução em branco. Não afeta o estado do programa. |
+
+#### Immediate
+
+| Alias | Instrução    | Descrição                             |
+| ----- | ------------ | ------------------------------------- |
+| li    | `li $r, imm` | Armazena o valor numérico imm em `$r` |
 
 #### Um Registrador
 
@@ -39,14 +45,24 @@
 
 #### Jump
 
+| Alias | Instrução | Descrição                                     |
+| ----- | --------- | --------------------------------------------- |
+| j     | `j $r`    | Desvio incondicional para o endereço em `$r`. |
+
+#### Branch
+
 | Alias | Instrução        | Descrição                                                    |
 | ----- | ---------------- | ------------------------------------------------------------ |
-| j     | `j $r`           | Desvio incondicional para o endereço em `$r`.                |
 | je    | `je $r, $s, $t`  | Desvio condicional para `$t` quando `$r` é igual a `$s`.     |
 | jne   | `jne $r, $s, $t` | Desvio condicional para `$t` quando `$r` não é igual a `$s`. |
 | jl    | `jl $r, $s, $t`  | Desvio condicional para `$t` quando `$r` é menor que `$s`.   |
 | jg    | `jg $r, $s, $t`  | Desvio condicional para `$t` quando `$r` é maior que `$s`.   |
-| call  | `call $r, $s`    | Desvio para `$s`armazenando PC em `$r`.                      |
+
+#### Call
+
+| Alias | Instrução     | Descrição                               |
+| ----- | ------------- | --------------------------------------- |
+| call  | `call $r, $s` | Desvio para `$s`armazenando PC em `$r`. |
 
 #### Memória
 

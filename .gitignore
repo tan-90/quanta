@@ -10,6 +10,8 @@ desktop.ini
 # Ignore pycache and assembler output
 toolkit/assembler/__pycache__/
 toolkit/test_generator/__pycache__/
+toolkit/assembler/parsetab.py
+toolkit/assembler/parser.out
 
 # Ignore assembler output
 toolkit/assembler/program.mif
