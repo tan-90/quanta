@@ -1,4 +1,4 @@
-class Signal:
+class Port:
     def __init__(self, name, direction, type, doxygen):
         self.name = name
         self.direction = direction
