@@ -5,6 +5,10 @@
 {block_s}
 {libs}
 {block_e}
+--! Use text IO for file manipulation.
+use std.textio.all;
+--! Use std_logic text IO for interfacing logic elements and files. 
+use ieee.std_logic_textio.all;
 
 --! @brief Empty top level entity for testbench.
 entity {name}_test is
