@@ -5,6 +5,7 @@
 {block_s}
 {libs}
 {block_e}
+
 --! Use text IO for file manipulation.
 use std.textio.all;
 --! Use std_logic text IO for interfacing logic elements and files. 
@@ -88,10 +89,10 @@ begin
             readline(file_in, vector_v);
             
             -- Read test case inputs and expected output.
+            
 {block_s}
 {read_case}
 {block_e}
-            
 
             -- Set UUT input signals to test case inputs.
 
@@ -107,7 +108,7 @@ begin
 {block_s}
 {write_signal}
 {block_e}
-            
+
             -- Check actual outputs against the expected ones.
             if {check_signal} then
                 -- Report a passed test to output file.
