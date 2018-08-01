@@ -51,14 +51,14 @@ entity alu is
     );
     port
     (
-        a_in        : in     std_logic_vector(data_width_g - 1 downto 0); --! ALU data input A.
-        b_in        : in     std_logic_vector(data_width_g - 1 downto 0); --! ALU data input B.
-        carry_in    : in     std_logic; --! ALU carry in.
+        a_in        : in  std_logic_vector(data_width_g - 1 downto 0); --! ALU data input A.
+        b_in        : in  std_logic_vector(data_width_g - 1 downto 0); --! ALU data input B.
+        carry_in    : in  std_logic; --! ALU carry in.
 
-        function_in : in     std_logic_vector( 3 downto 0); --! ALU function selector.
+        function_in : in  std_logic_vector( 3 downto 0); --! ALU function selector.
 
-        c_out       : buffer std_logic_vector(data_width_g - 1 downto 0); --! ALU result output C.
-        status_out  : out    std_logic_vector( 4 downto 0) --! ALU status output.
+        c_out       : out std_logic_vector(data_width_g - 1 downto 0); --! ALU result output C.
+        status_out  : out std_logic_vector( 4 downto 0) --! ALU status output.
     );
 end entity alu;
 
@@ -117,77 +117,79 @@ begin
     status_out(alu_status.S_PARITY)   <= xor(c_out);
 
     --! @brief Function selection process.
-    --! @details Calculates status and assigns output depending on selected function.
+    --! @details Assigns output depending on selected function.
     functions: process(a_in, b_in, carry_in, function_in, c_out, status_out, adder_s, adder_carry_s, subtractor_s, subtractor_carry_s)
     begin
         case function_in is
             when alu_functions.F_ZERO =>
                 c_out <= std_logic_vector(to_unsigned(0, data_width_g));
 
-                status_out(alu_status.S_CARRY)    <= '0';
-                status_out(alu_status.S_OVERFLOW) <= '0';
-
             when alu_functions.F_ADD =>
                 c_out <= adder_s;
-
-                status_out(alu_status.S_CARRY)    <= adder_carry_s;
-                status_out(alu_status.S_OVERFLOW) <= '0'; --! @TODO
 
             when alu_functions.F_SUBTRACT =>
                 c_out <= subtractor_s;
 
-                status_out(alu_status.S_CARRY)    <= subtractor_carry_s;
-                status_out(alu_status.S_OVERFLOW) <= '0'; --! @TODO
-
             when alu_functions.F_PASS_A =>
                 c_out <= a_in;
-
-                status_out(alu_status.S_CARRY)    <= '0';
-                status_out(alu_status.S_OVERFLOW) <= '0';
 
             when alu_functions.F_NOT =>
                 c_out <= not(a_in);
 
-                status_out(alu_status.S_CARRY)    <= '0';
-                status_out(alu_status.S_OVERFLOW) <= '0';
-
             when alu_functions.F_AND =>
                 c_out <= a_in and b_in;
-
-                status_out(alu_status.S_CARRY)    <= '0';
-                status_out(alu_status.S_OVERFLOW) <= '0';
 
             when alu_functions.F_OR =>
                 c_out <= a_in or b_in;
 
-                status_out(alu_status.S_CARRY)    <= '0';
-                status_out(alu_status.S_OVERFLOW) <= '0';
-
             when alu_functions.F_XOR =>
                 c_out <= a_in xor b_in;
-
-                status_out(alu_status.S_CARRY)    <= '0';
-                status_out(alu_status.S_OVERFLOW) <= '0';
 
             when alu_functions.F_XNOR =>
                 c_out <= a_in xnor b_in;
 
-                status_out(alu_status.S_CARRY)    <= '0';
-                status_out(alu_status.S_OVERFLOW) <= '0';
-
             when alu_functions.F_PASS_B =>
                 c_out <= b_in;
-
-                status_out(alu_status.S_CARRY)    <= '0';
-                status_out(alu_status.S_OVERFLOW) <= '0';
 
             when others =>
                 -- When a NOOP function is selected, set everything to 0.
                 -- NOOP functions shouldn't be used.
                 c_out <= std_logic_vector(to_unsigned(0, data_width_g));
 
-                status_out(alu_status.S_CARRY)    <= '0';
-                status_out(alu_status.S_OVERFLOW) <= '0';
         end case;
     end process functions;
+
+    --! @brief Carry out assignment process.
+    --! @details Calculates and assigns the carry bit depending on selected function and inputs.
+    carry_assignment: process(a_in, b_in, carry_in, function_in, c_out, status_out, adder_s, adder_carry_s, subtractor_s, subtractor_carry_s)
+    begin
+        case function_in is
+            when alu_functions.F_ADD =>
+                status_out(alu_status.S_CARRY) <= adder_carry_s;
+
+            when alu_functions.F_SUBTRACT =>
+                status_out(alu_status.S_CARRY) <= subtractor_carry_s;
+
+            when others =>
+                status_out(alu_status.S_CARRY) <= '0';
+        end case;
+    end process carry_assignment;
+
+    --! @brief Overflow assignment process.
+    --! @details Calculates and assigns the overflow bit depending on selected function and inputs.
+    overflow_assignment: process(a_in, b_in, carry_in, function_in, c_out, status_out, adder_s, adder_carry_s, subtractor_s, subtractor_carry_s)
+    begin
+        case function_in is
+            when alu_functions.F_ADD =>
+                status_out(alu_status.S_OVERFLOW) <= adder_carry_s;
+
+            when alu_functions.F_SUBTRACT =>
+                -- Overflow occurs when the two operants have the same sign, that is different from the result.
+                status_out(alu_status.S_OVERFLOW) <= (a_in(data_width_g - 1) xnor b_in(data_width_g - 1)) and (b_in(data_width_g - 1) xor c_out(data_width_g - 1));
+
+            when others =>
+                status_out(alu_status.S_OVERFLOW) <= '0';
+        end case;
+    end process overflow_assignment;
+
 end architecture behavioral;
