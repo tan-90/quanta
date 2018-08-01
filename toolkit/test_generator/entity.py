@@ -215,7 +215,7 @@ class Entity:
     ## @return The list of compare statements.
     def get_check_signal(self):
         check_signal = []
-        for signal in [s for s in self.signals if s.direction == 'out']:
+        for signal in [s for s in self.signals if s.direction == 'out' or s.direction == 'buffer']:
             line = '{}_s = {}_v'.format(signal.name, signal.name)
             check_signal.append(line)
         return check_signal
@@ -225,7 +225,7 @@ class Entity:
     ## @return The list of statements to log failures to file.
     def get_report_fail(self):
         report_fail = []
-        for signal in [s for s in self.signals if s.direction == 'out']:
+        for signal in [s for s in self.signals if s.direction == 'out' or s.direction == 'buffer']:
             info_line = 'write(stream_out_v, string\'(" Expected {}: "));'.format(signal.name)
             value_line = 'write(stream_out_v, {}_v );'.format(signal.name)
             lines = '{}\n{}\nwrite(stream_out_v, string\'("."));'.format(info_line, value_line)

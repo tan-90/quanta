@@ -25,7 +25,7 @@ r_generic = r'([\w\d]+)_g\s*:\s*(.*?)\s*:=\s*([0-9]+)\s*(--!.*)'
 ## @details /(port) : (in|out) (type); (--!doc)/
 ## @details Only supports in|out port types.
 ## @details Requires the port declaration to be documented with doxygen.
-r_port = r'([\w\d]+)\s*:\s*(in|out)\b\s*(.*?);?\s*(--!.*)'
+r_port = r'([\w\d]+)\s*:\s*(in|out|buffer)\b\s*(.*?);?\s*(--!.*)'
 
 ## @brief Takes in a VHDL source and returns entity information.
 ## @details Only supports files with a single entity declaration.

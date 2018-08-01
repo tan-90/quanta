@@ -7,7 +7,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 --! @brief Generic width carry lookahead adder.
---! @details https://en.wikipedia.org/wiki/Carry-lookahead_adder
+--! @see https://en.wikipedia.org/wiki/Carry-lookahead_adder
 entity lookahead_adder is
     generic
     (
@@ -49,12 +49,12 @@ begin
     --! @brief Carry lookahead process.
     --! @details Calculate each of the carry bits for the sum.
     --! @details Uses carry_in to calculate the first carry bit:
-    --! @details $carry_1 = generate_0 or (propagate_0 and carry_in)$
+    --! @details \f$carry_1 = generate_0 + (propagate_0 \cdot carry\_in)\f$
     --! @details Uses each carry bit to calculate the next, up to carry_out:
-    --! @details $carry_{i + 1} = generate_i or (propagate_i and carry_i)$
+    --! @details \f$carry_{i + 1} = generate_i + (propagate_i \cdot carry_i)\f$
     --! @details Calculates the final sum:
-    --! @details $c_0 = sum_0 \oplus carry_in$
-    --! @details $c_i = sum_i \oplus carry_i$
+    --! @details \f$c = a + b\f$
+    --! @details \f$c_i = sum_i \oplus carry_i\f$
     lookahead: process(carry_generate_s, carry_propagate_s,carry_s, carry_in)
     begin
         -- $carry_1 = generate_0 or (propagate_0 and carry_in)$
