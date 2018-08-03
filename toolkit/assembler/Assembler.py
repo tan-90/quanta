@@ -64,6 +64,10 @@ instruction_aliases = {i.alias: i for i in instructions }
 ## @details Register aliases won't collide with labels.
 register_aliases = {
     'zero': 0,
+    'leds': 16,
+    'hex0': 17,
+    'hex1': 18,
+    'hex2': 19,
     'ra': 30,
     'a': 31
 }
