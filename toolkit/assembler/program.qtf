@@ -6,13 +6,13 @@ li $1, 1
 li $2, 3
 li $10, 0
 
-mov $4, $20
-call $30, .mul
-mov $16, $10
-mov $17, $10
-mov $18, $10
-mov $19, $10
-j .end
+move $4, $20
+call $30, mul
+move $16, $10
+move $17, $10
+move $18, $10
+move $19, $ra
+j end
 
 move $4, $20
 not $10
@@ -35,7 +35,7 @@ div:
 
 load $0, $1
 load $0, $ra
-call $0, ra
+call $0, $ra
 
-.end:
-    j .end
+end:
+    j end

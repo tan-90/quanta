@@ -11,7 +11,7 @@ from Lexer import build_lexer, tokens
 import Util
 
 # @brief holds the error log for the past parser run.
-# @details While ply recomends globals in this situation, a lexer class would look better.
+# @details While ply recomends globals in this situation, a parser class would look better.
 # @TODO Turn lexer and parser into classes
 error_log = None
 

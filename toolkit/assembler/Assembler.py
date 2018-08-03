@@ -1,7 +1,10 @@
+## @file
+## @brief quanta assembler.
+
 import argparse
 
 from Parser import parse
-from Util import to_fixed_length_bin
+from Util import to_fixed_length_bin, format_error, format_column_marker
 from MIF import *
 
 ## @brief Holds information about an instruction
@@ -112,14 +115,47 @@ def assemble(data):
     instruction_li = [i for i in instructions if i.alias == 'li'][0]
 
     # Translates register aliases to the actual value.
-    def translate_named_regs(reg):
-        if isinstance(reg, tuple):
-            return register_aliases[reg[0]]
-        return reg
+    def translate_named_regs(lineno, line):
+        translated_regs = []
+        for reg in line[1]:
+            # Register aliases are parsed as tuples
+            if isinstance(reg, tuple):
+                # Report if alias has no corresponding register
+                if reg[0] not in register_aliases:
+                    # Find error line on input string
+                    input_line = data.split('\n')[lineno - 1]
+                    # Find index of label on input string
+                    error_column = input_line.find(reg[0])
+
+                    # Construct the error message
+                    title = 'Assembler failed.\nInvalid register alias:'
+                    error_pointer = 'line {}> '.format(lineno)
+                    description = format_column_marker(input_line, error_column, error_pointer)
+                    
+                    print(format_error(title, description))
+                    exit(-1)
+                translated_regs.append(register_aliases[reg[0]])
+            translated_regs.append(reg)
+        return tuple(translated_regs)
 
     # Utility for loading an address to the reserved register.
     # Useful when jumping to labels.
-    def load_reserved_reg(address):
+    def load_reserved_reg(label):
+        if label not in labels:
+                    # Find error line on input string
+                    input_line = data.split('\n')[lineno - 1]
+                    # Find index of label on input string
+                    error_column = input_line.find(label)
+
+                    # Construct the error message
+                    title = 'Assembler failed.\nUnknown label:'
+                    error_pointer = 'line {}> '.format(lineno)
+                    description = format_column_marker(input_line, error_column, error_pointer)
+
+                    print(format_error(title, description))
+                    exit(-1)
+
+        address = labels[label]
         word  = to_fixed_length_bin(instruction_li.opcode, opcode_length) # OPCODE
         word += to_fixed_length_bin(reserved_reg, reg_length)             # REGISTER
         word += to_fixed_length_bin(0, 3)                                 # PADDING
@@ -130,13 +166,14 @@ def assemble(data):
     words = []
 
     index = 0
-    for _, line in lines:
+    for lineno, line in lines:
         is_label = instruction_aliases.get(line[0], 'LABEL') == 'LABEL'
         if not is_label:
             # Get the instruction class corresponding to the given alias.
             instruction = instruction_aliases[line[0]]
             # Translate register aliases after using them as arguments.
-            args = tuple([translate_named_regs(reg) for reg in line[1]])
+            args = translate_named_regs(lineno, line)
+            # args = tuple([translate_named_regs(reg) for reg in line[1]])
             
             # Construct instruction word
             if instruction.type == 'NOOP':
@@ -170,7 +207,7 @@ def assemble(data):
                 # Checks for a jump to label instruction.
                 if is_label_jump:
                     # Load the address to the reserved register.
-                    word = load_reserved_reg(labels[args[0]])
+                    word = load_reserved_reg(args[0])
                     words.append(word)
                 
                 # When jumping to a label, the address is loaded to the reserved register.
@@ -185,7 +222,7 @@ def assemble(data):
                 # Checks for a branch to label instruction.
                 if is_label_branch:
                     # Load the address to the reserved register.
-                    word = load_reserved_reg(labels[args[2]])
+                    word = load_reserved_reg(args[2])
                     words.append(word)
                 
                 # When branching to a label, the address is loaded to the reserved register.
@@ -202,7 +239,7 @@ def assemble(data):
                 # Checks for a call instruction.
                 if is_label_call:
                     # Load the address to the reserved register.
-                    word = load_reserved_reg(labels[args[1]])
+                    word = load_reserved_reg(args[1])
                     words.append(word)
 
                 # When calling a label, the address is loaded to the reserved register.
