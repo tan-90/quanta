@@ -100,7 +100,7 @@ class Entity:
 
         _libs = formatter('libs')
         _signal_declarations = formatter('signal_declarations')
-        _generic_map = formatter('generic_map')
+        _generic_map = formatter('generic_map', ',\n')
         _port_map = formatter('port_map', ',\n')
         _variable_declarations = formatter('variable_declarations')
         _read_case = formatter('read_case', '\nread(vector_v, separator_v); -- Read the comma to the separator variable to discard it.\n')

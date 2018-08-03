@@ -19,7 +19,7 @@ r_name = r'entity\s*([\w\d]*)\s*is'
 ## @details Requires _g suffix to be used only and in all generics.
 ## @details Requires a default value.
 ## @details Requires the generic declaration to be documented with doxygen.
-r_generic = r'([\w\d]+)_g\s*:\s*(.*?)\s*:=\s*([0-9]+)\s*(--!.*)'
+r_generic = r'([\w\d]+)_g\s*:\s*(.*?)\s*:=\s*([0-9]+);?\s*(--!.*)'
 
 ## @brief Matches all the entity port declarations.
 ## @details /(port) : (in|out) (type); (--!doc)/
