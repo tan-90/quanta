@@ -1,0 +1,12 @@
+; Carregar os valores em registradores
+li $1, 2
+li $2, 5
+li $3, 4
+; Copiar $1 para $4
+move $4, $1
+; Calcular 2 + 5
+add $1, $2
+; Calcular 2 + 4
+add $4, $3
+; Exibe o resultado
+move $hex0, $4

@@ -1,0 +1,4 @@
+; Carrega valores em registradores
+li $1, 1
+li $2, 3
+li $3, 14

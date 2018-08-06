@@ -1,0 +1,16 @@
+; Calcular 42 + 3 - (14 - 15)
+li $1, 42
+li $2, 3
+li $3, 14
+li $4, 15
+; Calcular (14 - 15)
+; Subtrai $3 e $4 e salva em $3
+sub $3, $4
+; Calcular 42 + 3
+; Soma $1 e $2 e salva em $1
+add $1, $2
+; Calcular o valor final
+; Subtrai $1 e $3 e salva em $1
+sub $1, $3
+; Exibe o resultado
+move $hex0, $1

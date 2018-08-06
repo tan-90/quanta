@@ -115,7 +115,9 @@
 
 ​	Cada instrução binária suportada pelo processador é escrita na forma de uma palavra binária de 32 bits, sendo os 8 primeiros reservados para o identificador da operação. As instruções operam em registradores de 32 bits, realizando testes ou modificações e salvando ou não o resultado.
 
-#### Immediates
+​	A pasta `/doc/examples/` contêm os arquivos referentes a cada teste. O nome do arquivo é indicado entre parênteses após cada título.
+
+#### Immediates (LI)
 
 ​	Todos os registradores são inicializados com o valor 0, e não podem ser manipulados diretamente. Instruções do tipo immediate são instruções que carregam na palavra de instrução um valor relevante. A inicialização dos registradores é feita por meio de instruções **load immediate** (`li`).
 
@@ -133,16 +135,46 @@
 
 ​	A sintaxe das instruções do tipo immediate em assembly é dada por `INSTRUÇÃO $destino, immediate`. O código da instrução é especificado por meio da palavra `li`, o endereço do registrador de destino é dado por um número logo após o `$`, e o valor a ser carregado é simplesmente um valor numérico inteiro.
 
-`; Constante 0`  
-`li $0, 0`  
-`; Constante 1`  
-`li $1, 1`  
-`; Ponteiro da stack`  
-`li $29, 512`  
-`; Registrador de retorno`  
-`li $30, 0`
+`; Carrega valores em registradores`
+`li $1, 1`
+`li $2, 3`
+`li $3, 14`
 
-#### Operações simples
+#### Entrada e Saída (IO)
+
+​	O sistema de entrada e saída funciona como um recurso de debug, conectando registradores do processador aos leds, displays e switches da placa de desenvolvimento. Tais conexões permitem que alguns registradores específicos sejam tratados como registradores de entrada ou saída.
+
+​	Registradores de entrada ou saída possuem alises específicos, detalhados a seguir:
+
+![IO assignments.](C:\Projects\quanta\doc\res\IO.PNG)
+
+|      | Alias       | Registrador | Função                                                       |
+| ---- | ----------- | ----------- | ------------------------------------------------------------ |
+| 1    | `$switches` | `$20`       | Bits menos significativos conectados aos switches (`sw0-sw17`). |
+| 2    | `$leds`     | `$16`       | Bits menos significativos conectados aos leds vermelhos (`ldr0-ldr17`). |
+| 3    | `$hex0`     | `$17`       | Bits menos significativos conectados aos 4 displays de 7 segmentos (`hex0-hex3`) por meio de um decodificador hexadecimal. |
+| 4    | `$hex1`     | `$18`       | Bits menos significativos conectados aos 2 displays de 7 segmentos (`hex4-hex5`) por meio de um decodificador hexadecimal. |
+| 5    | `$hex2`     | `$19`       | Bits menos significativos conectados aos 4 displays de 7 segmentos (`hex6-hex7`) por meio de um decodificador hexadecimal. |
+
+
+
+##### Blockly
+
+​	Instruções do tipo **load immediate** (`li`) podem ser usadas para exibir valores quando o registrador apropriado é selecionado. Os valores de entrada dos switches são conectados diretamente ao banco de registradores e seu valor pode ser lido com uma instrução **move** (`move`), copiando o valor atual para um outro registrador de uso geral.
+
+![Definição de registradores comumente usados](C:\Projects\quanta\doc\res\IOProgram.PNG)
+
+##### Assembly
+
+`; Exibe um valor nos displays 4-5`  
+`li $hex1, 42`  
+`; Exibe um valor nos leds`  
+`li $leds, 512 `   
+`; Exibe o valor dos switches nos displays 0-3`  
+`move $1, $switches `  
+`move $hex0, $1`  
+
+#### Operações simples (OP)
 
 ​	Os tipos mais intuitivos de operações assembly são operações matemáticas ou lógicas envolvendo dois registradores. Um dos registradores funciona como destino e origem de dados, enquanto o outro funciona como apenas origem. 
 
@@ -170,25 +202,23 @@
 ​	A sintaxe das instruções de operação em registradores em assembly é dada por `INSTRUÇÃO $destino/origem, $origem`. O código da instrução é especificado por meio da palavra correspondente (`add` ou `sub` nesse exemplo), o endereço do registrador de destino/origem é dado por um número logo após o `$`, assim como o endereço do registrador de origem.
 
 `; Calcular 42 + 3 - (14 - 15)`  
-`; Carregar os valores em registradores`  
-`li $0, 42`  
-`li $1, 3`  
-`li $2, 14`  
-`li $3, 15`  
+`li $1, 42 `  
+`li $2, 3`  
+`li $3, 14`  
+`li $4, 15`  
 `; Calcular (14 - 15)`  
-`; Subtrai os registradores 2 e 3`  
-`; (e salva o resultado no registrador 2)`  
-`sub $2, $3`  
+`; Subtrai $3 e $4 e salva em $3`  
+`sub $3, $4`  
 `; Calcular 42 + 3`  
-`; Soma os registradores 0 e 1`  
-`; (e salva o resultado no registrador 0)`  
-`add $0, $1`  
+`; Soma $1 e $2 e salva em $1`  
+`add $1, $2`  
 `; Calcular o valor final`  
-`; Subtrai os registradores 0 e 2`  
-`; (e salva o resultado no registrador 0)`  
-`sub $0, $2`
+`; Subtrai $1 e $3 e salva em $1`  
+`sub $1, $3 `  
+`; Exibe o resultado `  
+`move $hex0, $1 `  
 
-#### Copiando valores
+#### Copiando valores (MV)
 
 ​	As operações entre registradores sobrescrevem o valor do registrador de destino, mas muitas vezes o valor de um registrador precisa ser usado em mais de uma operação, e não pode ser perdido. Como não é possível realizar uma operação sem sobrescrever o registrador de destino, em certas circunstâncias é necessário fazer cópias dos valores de um registrador.
 
@@ -214,18 +244,22 @@
 
 ​	A sintaxe da instrução de cópia de registradores em assembly é dada por `INSTRUÇÃO $destino, $origem`. O código da instrução é especificado por meio da palavra `mov`, o endereço do registrador de destino é dado por um número logo após o `$`, assim como o endereço do registrador de origem (a ordem é importante).
 
-`; Carregar os valores em registradores`  
-`li $0, 2`  
-`li $1, 5`  
-`li $2, 4`  
-`; Copiar o registrador 0 para o registrador 3`  
-`mov $3, $0`  
+`; Carregar os valores em registradores `  
+`li $1, 2`  
+`li $2, 5`  
+`li $3, 4 ` 
+`; Copiar $1 para $4`  
+`move $4, $1`  
 `; Calcular 2 + 5`  
-`add $0, $1`  
+`add $1, $2`  
 `; Calcular 2 + 4`  
-`sub $3, $2`
+`move $4, $3`  
 
-#### Operações condicionais
+`; Exibe o resultado`  
+
+`move $hex0, $4`   
+
+#### Operações condicionais (MUL)
 
 ​	Programas definidos por uma lista de valores e manipulações são limitados e capazes de executar apens da forma exata como foram escritos. Qualquer programa que espere resolver problemas mais complexos requer a capacidade de tomar decisões durante a execução do código, por exemplo reagir aos dados fornecidos por um usuário, ou aos próprios resultados obtidos durante sua execução.
 
@@ -253,6 +287,8 @@
 
 ​	Os blocos referentes a labels podem ser encontrados no meu de labels. Ao grupo de labels podem ser conectadas várias instruções que serão agrupadas e ao identificador de labels pode ser dado um nome (nesse caso igual ao do grupo) para uso como destino de desvio.
 
+​	Note o uso de um loop infinito no final da execução. Como o programa executa sem um sistema operacional, o processador continua executando infinitamente, eventualmente contando até o último endereço de memória e executando todas as instruções novamente. Para impedir que valores sejam sobrescritos (o que faria com que o resultado fosse exibido incorretamente), é importante "interromper" a execução utilizando um loop infinito.
+
 ![Exemplo de multiplicação por somas consecutivas.](C:\Projects\quanta\doc\res\ExemploMul.PNG)
 
 #####Assembly
@@ -262,7 +298,6 @@
 ​	As labels que definem pontos específicos no código são compostas por um identificador seguido de `:`. Uma convenção útil (mas não obrigatória) é indentar todas as linhas abaixo de uma label com quatro espaços.
 
 `; Carregar os valores em registradores`  
-`li $0, 0`  
 `li $1, 1`  
 `li $2, 3`  
 `li $3, 4`  
@@ -271,10 +306,16 @@
       `; Somar 4 no resultado`  
       `add $4, $3`  
       `; Subtrair 1 do contador de somas`  
-      `sub $1, $2`  
-      `jne $2, $0, soma`
+      `sub $2, $1`  
+      `jne $2, $zero, soma`  
 
-#### Subrotinas
+`; Exibe o resultado`  
+`move $hex0, $4`  
+`; Loop que interrope a execução`  
+`end:`  
+      `j end `   
+
+#### Subrotinas (CALL)
 
 ​	Exemplos como o anterior mostram que partes de um programa podem ser reaproveitadas, simplificando a escrita de código. Por exemplo, o trecho responsável por multiplicar os registradores `$2` e `$3` e armazenar o resultado no registrador `$4` pode ser utilizado para qualquer multiplicação, desde que os valores sejam colocados nos registradores `$2`e `$3`.
 
@@ -295,20 +336,22 @@
 ​	A sintaxe da instrução de chamada de subrotina em assembly é dada por `INSTRUÇÃO $destino, label`. O código da instrução é especificado por meio da palavra `call`, o registrador destino do endereço de retorno é dado pelo número logo após o `$` e o nome da subrotina é dado por um identificador com o mesmo nome da label correspondente.
 
 `; Carregar os valores em registradores`  
-`li $0, 0`  
 `li $1, 1`  
 `li $2, 3`  
 `li $3, 4`  
-`; Chamar subrotina de multiplicação`  
-`call $30, .mul`  
+`; Chamar a subrotina e exibir o resultado`  
+`call $ra, mul`  
+`move $hex0, $4`  
 `; Desviar para o final do programa`  
 `j end`  
-`; Multiplicação`  
 `mul:`  
+      `; Somar 4 no resultado`  
       `add $4, $3`  
+      `; Subtrair 1 do contador de somas`  
       `sub $2, $1`  
-      `jne $4, $0, .mul`  
-      `j $30`  
+      `jne $2, $zero, mul`  
+      `j $ra`  
 
-`end:`
+`end:`  
+      `j end`  
 

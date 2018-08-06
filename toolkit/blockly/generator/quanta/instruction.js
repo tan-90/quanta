@@ -17,7 +17,7 @@ Blockly.quanta['instruction_aliases'] = {
   "RR": 'rr',
   "JUMP": 'j',
 
-  "MOV": 'mov',
+  "MOVE": 'move',
   "LOAD": 'load',
   "STORE": 'store',
   "ADD": 'add',

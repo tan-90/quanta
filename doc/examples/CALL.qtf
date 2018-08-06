@@ -1,0 +1,19 @@
+; Carregar os valores em registradores
+li $1, 1
+li $2, 3
+li $3, 4
+; Chamar a subrotina e exibir o resultado
+call $ra, mul
+move $hex0, $4
+; Desviar para o final do programa
+j end
+mul:
+      ; Somar 4 no resultado
+      add $4, $3
+      ; Subtrair 1 do contador de somas
+      sub $2, $1
+      jne $2, $zero, mul
+      j $ra
+
+end:
+      j end

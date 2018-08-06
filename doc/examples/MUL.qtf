@@ -1,0 +1,18 @@
+; Carregar os valores em registradores
+li $0, 0
+li $1, 1
+li $2, 3
+li $3, 4
+; Início de uma soma consecutiva
+soma:
+      ; Somar 4 no resultado
+      add $4, $3
+      ; Subtrair 1 do contador de somas
+      sub $2, $1
+      jne $2, $zero, soma
+
+; Exibe o resultado
+move $hex0, $4
+; Loop que interrope a execução
+end:
+      j end

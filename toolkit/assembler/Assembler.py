@@ -44,7 +44,7 @@ instructions = [
     Instruction('XOR', 'DOUBLE_REG', 0x09, 'xor', ''),
     Instruction('XNOR', 'DOUBLE_REG', 0x0a, 'xnor', ''),
 
-    Instruction('Jump', 'JUMP', 0x0a, 'j', ''),
+    Instruction('Jump', 'JUMP', 0x12, 'j', ''),
 
     Instruction('Jump Equals', 'BRANCH', 0x13, 'je', ''),
     Instruction('Jump Not Equals', 'BRANCH', 0x14, 'jne', ''),
@@ -68,6 +68,7 @@ register_aliases = {
     'hex0': 17,
     'hex1': 18,
     'hex2': 19,
+    'switches': 20,
     'ra': 30,
     'a': 31
 }
@@ -139,7 +140,8 @@ def assemble(data):
                     print(format_error(title, description))
                     exit(-1)
                 translated_regs.append(register_aliases[reg[0]])
-            translated_regs.append(reg)
+            else:
+                translated_regs.append(reg)
         return tuple(translated_regs)
 
     # Utility for loading an address to the reserved register.

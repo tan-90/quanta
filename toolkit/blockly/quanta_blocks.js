@@ -100,8 +100,8 @@ var typeRegisterJson = {
                     "$hex2"
                 ],
                 [
-                    "20",
-                    "$20"
+                    "switches",
+                    "$switches"
                 ],
                 [
                     "21",
@@ -343,8 +343,8 @@ var instructionDoubleRegisterJson = {
             "name": "INSTRUCTION",
             "options": [
                 [
-                    "mov",
-                    "MOV"
+                    "move",
+                    "MOVE"
                 ],
                 [
                     "load",
