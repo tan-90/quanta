@@ -4,6 +4,22 @@
 
 ​	O conjunto de ferramentas inclui um editor de blocos Blockly para programação assembly e um assembler que implementa uma linguagem própria inspirada na MIPS.
 
+## Setup
+
+### Quartus 2
+
+​	Quatus 2 é o ambiente oficial de desenvolvimento da Altera, utilizado para síntese e testes de VHDL. Também inclui ferramentas para programação do FPGA. Esse é o software usado para abrir o arquivo do projeto `quanta2.qpf`.
+
+​	É importante que a compilação inteligente esteja habilitada garantindo que apenas partes do código que foram alteradas sejam recompliadas. Uma compilação completa do circuito é demorada, e desnecessária para testes, como apenas o conteúdo da memória será alterado. Habilite a compilação rápida por meio do menu: `Assingnments > Settings > Compilation Process Settings > Use smart compilation`.
+
+### Toolkit
+
+​	O conjunto de ferramentas e documentação atual do processador estão disponíveis no [repositório oficial no gitlab](https://gitlab.com/tan90/quanta). Uma cópia local dos arquivos para uso pode ser obtida clonando o repositório e as dependências. Para isso, abra um terminal, navegue até a pasta desejada e execute o comando `git clone git@gitlab.com:tan90/quanta.git --recursive`.
+
+### Circuito
+
+​	A versão oficial do modelo do circuito ainda está em processo de reescrita e documentação, portanto não disponível no branch principal do repositório. Para obter uma cópia do modelo do circuito, utilize o [link de download](https://drive.google.com/open?id=1TJbYNRwZ1W-UT-RrjKdNOl4MS7qltRr0).
+
 ## Arquitetura
 
 ### Instruções
