@@ -83,7 +83,7 @@
 
 ​	O editor de blocos pode ser encontrado na pasta do projeto em: `/toolkit/blockly/editor.html`. Todos os recursos do editor estão disponíveis na tela inicial:
 
-![The main Blockly editor window.](C:\Projects\quanta\doc\res\BlocklyEditor.png)
+![The main Blockly editor window.](res\BlocklyEditor.png)
 
 1. Menu de seleção de categoria de blocos
 2. Disponível após selecionar uma categoria. Lista todos os blocos.
@@ -129,7 +129,7 @@
 
 ​	O bloco correspondente a instruções do tipo immediate pode ser encontrado no menu de instruções. O código da instrução **load immediate** (`li`) pode ser selecionado no *dropdown* à esquerda do bloco. O slot **A** aceita um registrador de destino e o slot **immediate** aceita um valor numérico a ser carregado.
 
-![Definição de registradores comumente usados](C:\Projects\quanta\doc\res\RegistradoresPadrao.PNG)
+![Definição de registradores comumente usados](res\RegistradoresPadrao.PNG)
 
 #####Assembly
 
@@ -146,7 +146,7 @@
 
 ​	Registradores de entrada ou saída possuem alises específicos, detalhados a seguir:
 
-![IO assignments.](C:\Projects\quanta\doc\res\IO.PNG)
+![IO assignments.](res\IO.PNG)
 
 |      | Alias       | Registrador | Função                                                       |
 | ---- | ----------- | ----------- | ------------------------------------------------------------ |
@@ -162,7 +162,7 @@
 
 ​	Instruções do tipo **load immediate** (`li`) podem ser usadas para exibir valores quando o registrador apropriado é selecionado. Os valores de entrada dos switches são conectados diretamente ao banco de registradores e seu valor pode ser lido com uma instrução **move** (`move`), copiando o valor atual para um outro registrador de uso geral.
 
-![Definição de registradores comumente usados](C:\Projects\quanta\doc\res\IOProgram.PNG)
+![Definição de registradores comumente usados](res\IOProgram.PNG)
 
 ##### Assembly
 
@@ -195,7 +195,7 @@
 
 ​	O bloco correspondente a instruções de operação em registradores pode ser encontrado no menu de instruções. O código da instrução pode ser selecionado no *dropdown* à esquerda do bloco, nesse exemplo **soma** (`add`) e **subtração** (`sub`). O slot **A** aceita um registrador de destino e origem e o slot **B** aceita um registrador de origem.
 
-![Exemplo do cálculo de uma expressão](C:\Projects\quanta\doc\res\ExemploSoma.PNG)
+![Exemplo do cálculo de uma expressão](res\ExemploSoma.PNG)
 
 ##### Assembly
 
@@ -238,7 +238,7 @@
 
 ​	O bloco correspondente a instrução de cópia pode ser encontrado no menu de instruções. O código da instrução **move** (`mov`) pode ser selecionado no *dropdown* à esquerda do bloco. O slot **A** aceita um registrador de destino e o slot **B** aceita um registrador de origem (a ordem é importante).
 
-![Exemplo de cópia de valores em registradores.](C:\Projects\quanta\doc\res\ExemploMove.PNG)
+![Exemplo de cópia de valores em registradores.](res\ExemploMove.PNG)
 
 ##### Assembly
 
@@ -289,7 +289,7 @@
 
 ​	Note o uso de um loop infinito no final da execução. Como o programa executa sem um sistema operacional, o processador continua executando infinitamente, eventualmente contando até o último endereço de memória e executando todas as instruções novamente. Para impedir que valores sejam sobrescritos (o que faria com que o resultado fosse exibido incorretamente), é importante "interromper" a execução utilizando um loop infinito.
 
-![Exemplo de multiplicação por somas consecutivas.](C:\Projects\quanta\doc\res\ExemploMul.PNG)
+![Exemplo de multiplicação por somas consecutivas.](res\ExemploMul.PNG)
 
 #####Assembly
 
@@ -329,7 +329,7 @@
 
 ​	O bloco correspondente a instrução de chamada de subrotina pode ser encontrado no menu de instruções. O código da instrução **call** (`call`) pode ser selecionado no *dropdown* à esquerda do bloco. O slot **A** aceita o registrador de destino do endereço de retorno  e o slot **B** aceita a label que identifica a subrotina.
 
-![Exemplo de subrotina de multiplicação.](C:\Projects\quanta\doc\res\ExemploSubrotina.PNG)
+![Exemplo de subrotina de multiplicação.](res\ExemploSubrotina.PNG)
 
 ##### Assembly
 
@@ -354,4 +354,3 @@
 
 `end:`  
       `j end`  
-
