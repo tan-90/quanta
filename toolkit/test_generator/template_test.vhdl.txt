@@ -35,14 +35,9 @@ architecture behavioral of {name}_test is
 begin
     --! @brief Unit under test.
     uut: entity work.{name}(behavioral)
-    generic map
-    (
-
 {block_s}
 {generic_map}
 {block_e}
-
-    )
     port map
     (
 

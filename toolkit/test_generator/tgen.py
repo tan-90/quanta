@@ -48,12 +48,16 @@ in_path = '{}/{}_test.csv'.format('test/in', clean_file_name)
 ## @details Changes folder separators to '_' as VHDL can't create directories.
 out_path = '{}/{}_test.csv'.format('test/out', clean_file_name.replace('/', '_'))
 
-with open(os.path.join(args.root, testbench_path), 'w') as file:
+testbench_path = os.path.join(args.root, testbench_path)
+os.makedirs(os.path.dirname(testbench_path), exist_ok=True)
+with open(testbench_path, 'w') as file:
     # As the modelsim project root will be on a subfolder, the paths have to be joined with a '../'
     file.write(entity.get_testbench(template, os.path.join('../', in_path), os.path.join('../', out_path)))
 
 # Generate a csv template file if requested.
 if args.csv:
-    with open(os.path.join(args.root, in_path), 'w') as file:
+    in_path = os.path.join(args.root, in_path)
+    os.makedirs(os.path.dirname(in_path), exist_ok=True)
+    with open(in_path, 'w') as file:
         file.write(entity.get_csv())
 

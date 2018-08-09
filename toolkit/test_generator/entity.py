@@ -100,7 +100,12 @@ class Entity:
 
         _libs = formatter('libs')
         _signal_declarations = formatter('signal_declarations')
-        _generic_map = formatter('generic_map', ',\n')
+        _generic_map = ''
+        if len(self.testbench_data['generic_map']) != 0:
+            _generic_map = formatter('generic_map', ',\n')
+            _generic_map = 'generic map\n(\n{}\n)\n'.format(_generic_map)
+        else:
+            _generic_map = '-- [tgen] No generics on UUT.'
         _port_map = formatter('port_map', ',\n')
         _variable_declarations = formatter('variable_declarations')
         _read_case = formatter('read_case', '\nread(vector_v, separator_v); -- Read the comma to the separator variable to discard it.\n')
