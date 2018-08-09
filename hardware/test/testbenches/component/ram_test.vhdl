@@ -35,6 +35,7 @@ architecture behavioral of ram_test is
 -- Start of tgen generated code block.
 
 signal clock_in_s:std_logic;--! Clock signal.
+signal reset_in_s:std_logic;--! Active high reset signal.
 signal enable_in_s:std_logic;--! Active high enable signal.
 signal address_in_s:std_logic_vector(8 - 1 downto 0);--! RAM read/write address.
 signal data_in_s:std_logic_vector(32    - 1 downto 0);--! RAM data input.
@@ -62,7 +63,8 @@ begin
 -- Start of tgen generated code block.
 
 data_width_g => 32,
-address_width_g => 8
+address_width_g => 8,
+init_file_g => "data.hex"
 
 --  End of tgen generated code block.
 --------------------------------------
@@ -75,6 +77,7 @@ address_width_g => 8
 -- Start of tgen generated code block.
 
 clock_in=>clock_in_s,
+reset_in=>reset_in_s,
 enable_in=>enable_in_s,
 address_in=>address_in_s,
 data_in=>data_in_s,
@@ -98,6 +101,7 @@ data_out=>data_out_s
 -- Start of tgen generated code block.
 
 variable clock_in_v:std_logic; --! Clock signal.
+variable reset_in_v:std_logic; --! Active high reset signal.
 variable enable_in_v:std_logic; --! Active high enable signal.
 variable address_in_v:std_logic_vector(8 - 1 downto 0); --! RAM read/write address.
 variable data_in_v:std_logic_vector(32    - 1 downto 0); --! RAM data input.
@@ -138,6 +142,8 @@ variable data_out_v:std_logic_vector(32 - 1 downto 0); --! RAM data output.
 
 read(vector_v, clock_in_v);
 read(vector_v, separator_v); -- Read the comma to the separator variable to discard it.
+read(vector_v, reset_in_v);
+read(vector_v, separator_v); -- Read the comma to the separator variable to discard it.
 read(vector_v, enable_in_v);
 read(vector_v, separator_v); -- Read the comma to the separator variable to discard it.
 read(vector_v, address_in_v);
@@ -157,6 +163,7 @@ read(vector_v, data_out_v);
 -- Start of tgen generated code block.
 
 clock_in_s<=clock_in_v;
+reset_in_s<=reset_in_v;
 enable_in_s<=enable_in_v;
 address_in_s<=address_in_v;
 data_in_s<=data_in_v;
@@ -174,6 +181,8 @@ we_in_s<=we_in_v;
 -- Start of tgen generated code block.
 
 write(stream_out_v, clock_in_s);
+write(stream_out_v, string'(","));
+write(stream_out_v, reset_in_s);
 write(stream_out_v, string'(","));
 write(stream_out_v, enable_in_s);
 write(stream_out_v, string'(","));

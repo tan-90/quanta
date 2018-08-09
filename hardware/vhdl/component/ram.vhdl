@@ -19,11 +19,14 @@ entity ram is
     generic
     (
         data_width_g    : integer := 32; --! Data signal width.
-        address_width_g : integer :=  8  --! Read/Write address bus width.
+        address_width_g : integer :=  8; --! Read/Write address bus width.
+
+        init_file_g     : string  := "UNKOWN" --! Memory initialization file path. 
     );
     port
     (
         clock_in   : in  std_logic; --! Clock signal.
+        reset_in   : in  std_logic; --! Active high reset signal.
         enable_in  : in  std_logic; --! Active high enable signal.
 
         address_in : in  std_logic_vector(address_width_g - 1 downto 0); --! RAM read/write address.
@@ -50,15 +53,17 @@ architecture behavioral of ram is
     --! @brief RAM initialization file attribute.
     attribute ram_init_file : string;                                 
     --! @brief Initializes ram data using memory initialization file.
-    attribute ram_init_file of memory_s: signal is "../data/data.mif"; 
+    attribute ram_init_file of memory_s: signal is init_file_g; 
 begin
     --! @brief Clock and enable process.
+    --! @details Clears output on reset signal.
     --! @details Sets word at given address to input on clock rising edge if we and enable are high.
     --! @details Sets output to word at given address on clock rising edge if enabled is high.
-    read_write: process(clock_in, enable_in, address_in, data_in, we_in)
+    read_write: process(clock_in, reset_in, enable_in, address_in, data_in, we_in)
     begin
-        -- Read/write to memory on rising edge if enabled.
-         if enable_in = '1' and rising_edge(clock_in) then
+        if reset_in = '1' then
+            data_out <= std_logic_vector(to_unsigned(0, data_width_g));
+        elsif enable_in = '1' and rising_edge(clock_in) then
             if we_in = '1' then
                -- Write input word to memory at address.
                memory_s(conv_integer(address_in)) <= data_in;
