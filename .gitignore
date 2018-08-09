@@ -21,6 +21,9 @@ doc/latex/
 # Ignore modelsim project files
 hardware/modelsim/
 
+# Ignore generated testbenches
+hardware/test/testbenches/
+
 # Ignore test output
 hardware/test/out/
 
