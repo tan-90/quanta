@@ -258,7 +258,8 @@ def assemble(data):
                 words.append(word)
             
             index += 2 if is_label_instruction(line) else 1
-    
+            
+    print('Assembler successful.')
     return words
 
 
