@@ -7,6 +7,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 --! Use numeric elements for generic type and vector construction.
 use ieee.numeric_std.all;
+--! Use misc logic to replace unary operators for VHDL 2002 compatibility.
+use ieee.std_logic_misc.all;
 
 --! Use the function code definitions.
 use work.alu_functions;
@@ -57,7 +59,7 @@ entity alu is
 
         function_in : in  std_logic_vector( 3 downto 0); --! ALU function selector.
 
-        c_out       : out std_logic_vector(data_width_g - 1 downto 0); --! ALU result output C.
+        c_out       : buffer std_logic_vector(data_width_g - 1 downto 0); --! ALU result output C.
         status_out  : out std_logic_vector( 4 downto 0) --! ALU status output.
     );
 end entity alu;
@@ -110,11 +112,11 @@ begin
     );
 
     -- Set the zero bit when all bits on the output are zero.
-    status_out(alu_status.S_ZERO)     <= '0' when or(c_out) else '1';
+    status_out(alu_status.S_ZERO)     <= '1' when unsigned(c_out) = 0 else '0';
     -- Set the sign bit based on output.
     status_out(alu_status.S_SIGN)     <= c_out(data_width_g - 1);
     -- XOR reduce the output to get the even parity bit.
-    status_out(alu_status.S_PARITY)   <= xor(c_out);
+    status_out(alu_status.S_PARITY)   <= xor_reduce(c_out);
 
     --! @brief Function selection process.
     --! @details Assigns output depending on selected function.

@@ -47,7 +47,10 @@ entity register_file is
 		data_c_out       : out std_logic_vector(data_width_g - 1 downto 0)  --! Output data c.
     );
 end entity register_file;
-        
+
+--! @brief Default register file behavior.
+--! @details Rising edge triggered generic width register file.
+--! @details Active high clear and enable signals.
 architecture behavioral of register_file is
     --! @brief Data word type.
     subtype word is std_logic_vector(data_width_g - 1 downto 0);
