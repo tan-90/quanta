@@ -18,8 +18,9 @@ toolkit/assembler/program.mif
 doc/html/
 doc/latex/
 
-# Ignore modelsim project files
+# Ignore modelsim and quartus project files
 hardware/modelsim/
+hardware/quartus/
 
 # Ignore generated testbenches
 hardware/test/testbenches/
