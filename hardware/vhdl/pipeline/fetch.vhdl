@@ -8,7 +8,6 @@ use ieee.std_logic_1164.all;
 --! Use numeric elements for generic type and vector construction.
 use ieee.numeric_std.all;
 
-
 --! @brief Pipeline instruction fetch stage.
 --! @details Fetches data at program counter on rising edge.
 entity fetch is
@@ -36,6 +35,7 @@ end entity fetch;
 --! @brief Default fetch behavior.
 --! @details Fetches instruction from memory at program counter address on rising edge.
 --! @details Increments program counter on each fetch, or sets it to jump address.
+--! @details As jump slots are not implemented in the assembler, the stall signal also prevents the RAM from reading.
 --! @details Active high clear and enable signals.
 architecture behavioral of fetch is
     --! @brief The current value of the program counter.
