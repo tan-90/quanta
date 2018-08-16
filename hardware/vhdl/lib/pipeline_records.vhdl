@@ -73,7 +73,7 @@ package pipeline_records is
 	    opcode                 : std_logic_vector( 7 downto 0);
 	    jump_address           : std_logic_vector(31 downto 0);
 	    result                 : std_logic_vector(31 downto 0);
-	    status                 : std_logic_vector( 3 downto 0);
+		status                 : std_logic_vector( 4 downto 0);
 	    memory_address         : std_logic_vector(31 downto 0);
 	    write_back_address     : std_logic_vector( 4 downto 0);
 		

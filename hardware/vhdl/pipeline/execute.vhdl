@@ -32,7 +32,7 @@ entity execute is
 		
 		jump_address_out       : out std_logic_vector(31 downto 0); --! Jump address for jump instructions.
 		result_out             : out std_logic_vector(31 downto 0); --! Result of the current instruction.
-		status_out             : out std_logic_vector( 3 downto 0); --! Status of the ALU/Shifter for the current instruction.
+		status_out             : out std_logic_vector( 4 downto 0); --! Status of the ALU/Shifter for the current instruction.
 		mem_address_out        : out std_logic_vector(31 downto 0); --! Memory address for load/stor instructions.
 		write_back_address_out : out std_logic_vector( 4 downto 0)  --! Address to write back the result for the current instruction.
 	);
@@ -149,5 +149,5 @@ begin
     -- Select the appropriate result between alu and shifter based on wether or not the alu is selected.
     result_out <= alu_result_s when alu_select_in = '1' else shifter_result_s;
     -- Select the appropriate status between alu and shifter based on wether or not the alu is selected.
-    status_out <= shifter_status_s when alu_select_in = '1' else shifter_status_s;
+    status_out <= alu_status_s when alu_select_in = '1' else shifter_status_s;
 end architecture behavioral;

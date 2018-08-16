@@ -22,7 +22,7 @@ entity jump_controller is
 	port
 	(
 		opcode_in : in std_logic_vector( 7 downto 0); --! The OPCODE to check for jump conditions.
-		status_in : in std_logic_vector( 3 downto 0); --! The status of the executed instruction.
+		status_in : in std_logic_vector( 4 downto 0); --! The status of the executed instruction.
 		
 		jump_out : out std_logic --! Active high jump signal.
  	);
