@@ -67,7 +67,7 @@ begin
             if we_in = '1' then
                -- Write input word to memory at address.
                memory_s(conv_integer(address_in)) <= data_in;
-               data_out <= data_in;
+               data_out <= memory_s(conv_integer(address_in));
             else
                -- Read output word from memory at address.
                data_out <= memory_s(conv_integer(address_in));

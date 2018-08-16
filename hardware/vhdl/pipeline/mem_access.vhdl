@@ -16,27 +16,27 @@ entity memory_access is
     (
         data_width_g : integer := 32 --! data signal width.
     );
-	PORT
+	port
 	(
-        clock_in         : in  std_logic; --! Clock signal.
-        reset_in         : in  std_logic; --! Active high reset signal.
-        enable_in        : in  std_logic; --! Active high enable signal.
+        clock_in               : in  std_logic; --! Clock signal.
+        reset_in               : in  std_logic; --! Active high reset signal.
+        enable_in              : in  std_logic; --! Active high enable signal.
 
-		we_in : IN STD_LOGIC; --! RAM active high write enable.
+		we_in                  : in std_logic; --! RAM active high write enable.
 		
-		result_in : in  std_logic_vector(31 downto 0); --! Execute stage result output.
-		memory_address_in : in  std_logic_vector(31 downto 0); --! The memory address the current instruciton refers to.
-		write_back_address_in : in  std_logic_vector( 4 downto 0); --! The write back register address.
+		result_in              : in  std_logic_vector(31 downto 0); --! Execute stage result output.
+		memory_address_in      : in  std_logic_vector(31 downto 0); --! The memory address the current instruciton refers to.
+		write_back_address_in  : in  std_logic_vector( 4 downto 0); --! The write back register address.
 		
 		
-		data_out : out std_logic_vector(31 downto 0); --! Pass through data signal.
-		ram_data_out : out std_logic_vector(31 downto 0); --! RAM read data signal.
+		data_out               : out std_logic_vector(31 downto 0); --! Pass through data signal.
+		ram_data_out           : out std_logic_vector(31 downto 0); --! RAM read data signal.
 		write_back_address_out : out std_logic_vector( 4 downto 0) --! Pass trough write back register address.
 		
  	);
 end entity memory_access;
 
---! @brief Default execute behavior.
+--! @brief Default memory access behavior.
 architecture behavioral of memory_access is
 begin
 	data_out <= result_in;
@@ -44,7 +44,7 @@ begin
     
     --! @brief Data RAM.
     --! @details The RAM used by load/store instructions.
-	instruction_ram: entity work.ram(behavioral)
+	data_ram: entity work.ram(behavioral)
 	generic map
 	(
 		data_width_g    => data_width_g,

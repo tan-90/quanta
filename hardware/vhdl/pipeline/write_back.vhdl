@@ -11,14 +11,14 @@ use ieee.numeric_std.all;
 entity write_back is
 	port
 	(
-		ram_data_select_in : in  std_logic;
-		call_instruction_in : in std_logic;
+		ram_data_select_in  : in  std_logic;
+		call_instruction_in : in  std_logic;
 	
-		data_in : in  std_logic_vector(31 downto 0);
-		ram_data_in : in  std_logic_vector(31 downto 0);
-		pc_in : in std_logic_vector(31 downto 0);
+		data_in             : in  std_logic_vector(31 downto 0);
+		ram_data_in         : in  std_logic_vector(31 downto 0);
+		pc_in               : in  std_logic_vector(31 downto 0);
 		
-		write_back_data_out: out std_logic_vector(31 downto 0)
+		write_back_data_out : out std_logic_vector(31 downto 0)
  	);
 end entity write_back;
 
