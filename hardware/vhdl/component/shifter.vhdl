@@ -59,7 +59,7 @@ entity shifter is
         function_in : in  std_logic_vector( 3 downto 0); --! Shifter function selector.
 
         c_out       : buffer std_logic_vector(data_width_g - 1 downto 0); --! Shifter result output C.
-        status_out  : out std_logic_vector( 4 downto 0) --! Shifter status output.
+        status_out  : buffer std_logic_vector( 4 downto 0) --! Shifter status output.
     );
 end entity shifter;
 

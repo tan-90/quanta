@@ -60,7 +60,7 @@ entity alu is
         function_in : in  std_logic_vector( 3 downto 0); --! ALU function selector.
 
         c_out       : buffer std_logic_vector(data_width_g - 1 downto 0); --! ALU result output C.
-        status_out  : out std_logic_vector( 4 downto 0) --! ALU status output.
+        status_out  : buffer std_logic_vector( 4 downto 0) --! ALU status output.
     );
 end entity alu;
 
