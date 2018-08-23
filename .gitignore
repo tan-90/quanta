@@ -7,16 +7,18 @@ desktop.ini
 # It could be included once proper tasks are set up
 .vscode/
 
-# Ignore pycache and assembler output
+# Ignore pycache
 toolkit/assembler/__pycache__/
 toolkit/test_generator/__pycache__/
+
+# Ignore ply output files
 toolkit/assembler/parsetab.py
 toolkit/assembler/parser.out
 
 # Ignore assembler output
 toolkit/assembler/program.mif
 
-# Ignore modelsim project folder
+# Ignore modelsim and quartus project folders
 hardware/modelsim/
 
 # Ignore test output folder
@@ -25,6 +27,9 @@ hardware/test/out/
 # Ignore doxygen generated files
 doc/html/
 doc/latex/
+
+# Ignore generated testbenches
+hardware/test/testbenches/
 
 # Ignore test output
 hardware/test/out/
