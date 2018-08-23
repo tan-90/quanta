@@ -6,6 +6,8 @@ goog.require('Blockly.quanta');
 goog.require('Blockly.quanta.aliases.registers');
 
 Blockly.quanta['instruction_aliases'] = {
+  "NOOP": 'noop ',
+  
   "LOAD_IMMEDIATE": 'li',
 
   "NOT": 'not',
@@ -15,7 +17,7 @@ Blockly.quanta['instruction_aliases'] = {
   "RR": 'rr',
   "JUMP": 'j',
 
-  "MOV": 'mov',
+  "MOVE": 'move',
   "LOAD": 'load',
   "STORE": 'store',
   "ADD": 'add',

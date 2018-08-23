@@ -20,8 +20,8 @@ var typeRegisterJson = {
             "name": "NAME",
             "options": [
                 [
-                    "0",
-                    "$0"
+                    "zero",
+                    "$zero"
                 ],
                 [
                     "1",
@@ -84,24 +84,24 @@ var typeRegisterJson = {
                     "$15"
                 ],
                 [
-                    "16",
-                    "$16"
+                    "leds",
+                    "$leds"
                 ],
                 [
-                    "17",
-                    "$17"
+                    "hex0",
+                    "$hex0"
                 ],
                 [
-                    "18",
-                    "$18"
+                    "hex1",
+                    "$hex1"
                 ],
                 [
-                    "19",
-                    "$19"
+                    "hex2",
+                    "$hex2"
                 ],
                 [
-                    "20",
-                    "$20"
+                    "switches",
+                    "$switches"
                 ],
                 [
                     "21",
@@ -140,12 +140,12 @@ var typeRegisterJson = {
                     "$29"
                 ],
                 [
-                    "30",
-                    "$30"
+                    "ra",
+                    "$ra"
                 ],
                 [
-                    "31",
-                    "$31"
+                    "a",
+                    "$a"
                 ],
             ]
         }
@@ -165,7 +165,7 @@ Blockly.Blocks['type_register'] = {
 
 var typeLabelJson = {
     "type": "type_label",
-    "message0": ". %1",
+    "message0": "%1",
     "args0": [
         {
             "type": "field_input",
@@ -343,8 +343,8 @@ var instructionDoubleRegisterJson = {
             "name": "INSTRUCTION",
             "options": [
                 [
-                    "mov",
-                    "MOV"
+                    "move",
+                    "MOVE"
                 ],
                 [
                     "load",
@@ -491,7 +491,7 @@ Blockly.Blocks['instruction_triple_register'] = {
  */
 var labelGroupJson = {
     "type": "label_group",
-    "message0": ". %1 %2 %3",
+    "message0": "%1 %2 %3",
     "args0": [
         {
             "type": "field_input",

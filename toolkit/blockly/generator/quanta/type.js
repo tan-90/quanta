@@ -14,5 +14,5 @@ Blockly.quanta['type_register'] = function(block) {
 Blockly.quanta['type_label'] = function (block) {
   var label = block.getFieldValue('NAME');
 
-  return ['.' + label, Blockly.quanta.ORDER_ATOMIC];
+  return [label, Blockly.quanta.ORDER_ATOMIC];
 };

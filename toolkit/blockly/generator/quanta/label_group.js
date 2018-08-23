@@ -8,7 +8,7 @@ Blockly.quanta['label_group'] = function (block) {
     var label = block.getFieldValue('LABEL');
     var statements = Blockly.quanta.statementToCode(block, 'STATEMENTS').split('\n');
 
-    var code = '.' + label + ':\n';
+    var code = label + ':\n';
 
     for(var i = 0; i < statements.length; i++)
     {

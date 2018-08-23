@@ -1,0 +1,7 @@
+; Exibe um valor nos displays 4-5
+li $hex1, 42
+; Exibe um valor nos leds
+li $leds, 512
+; Exibe o valor dos switches nos displays 0-3
+move $1, $switches
+move $hex0, $1
