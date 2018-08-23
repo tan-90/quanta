@@ -20,6 +20,7 @@ toolkit/assembler/program.mif
 
 # Ignore modelsim and quartus project folders
 hardware/modelsim/
+hardware/quartus/
 
 # Ignore test output folder
 hardware/test/out/

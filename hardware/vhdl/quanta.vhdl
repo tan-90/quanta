@@ -314,7 +314,7 @@ begin
         port map
         (
             clock_in  => clock_in,
-            reset_in  => reset_in,
+            reset_in  => jump_controller_jump_s,
             enable_in => enable_in,
     
             data_in   => in_decode_execute_s,
