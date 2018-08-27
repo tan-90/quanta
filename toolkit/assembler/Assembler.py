@@ -80,8 +80,12 @@ register_aliases = {
 ## @return Wether or not the instruction uses a label argument.
 def is_label_instruction(line):
     instruction = instruction_aliases[line[0]]
-    args = line[1]
 
+    # NOOP needs a special case as it has no args.
+    if instruction.type == 'NOOP':
+        return False
+
+    args = line[1]
     result = False
     result |= instruction.type == 'JUMP'   and isinstance(args[0], str)
     result |= instruction.type == 'BRANCH' and isinstance(args[2], str)
@@ -148,18 +152,18 @@ def assemble(data):
     # Useful when jumping to labels.
     def load_reserved_reg(label):
         if label not in labels:
-                    # Find error line on input string
-                    input_line = data.split('\n')[lineno - 1]
-                    # Find index of label on input string
-                    error_column = input_line.find(label)
+            # Find error line on input string
+            input_line = data.split('\n')[lineno - 1]
+            # Find index of label on input string
+            error_column = input_line.find(label)
 
-                    # Construct the error message
-                    title = 'Assembler failed.\nUnknown label:'
-                    error_pointer = 'line {}> '.format(lineno)
-                    description = format_column_marker(input_line, error_column, error_pointer)
+            # Construct the error message
+            title = 'Assembler failed.\nUnknown label:'
+            error_pointer = 'line {}> '.format(lineno)
+            description = format_column_marker(input_line, error_column, error_pointer)
 
-                    print(format_error(title, description))
-                    exit(-1)
+            print(format_error(title, description))
+            exit(-1)
 
         address = labels[label]
         word  = to_fixed_length_bin(instruction_li.opcode, opcode_length) # OPCODE
@@ -173,89 +177,87 @@ def assemble(data):
 
     index = 0
     for lineno, line in lines:
-        is_label = instruction_aliases.get(line[0], 'LABEL') == 'LABEL'
+        is_label = line != 'noop' and instruction_aliases.get(line[0], 'LABEL') == 'LABEL'
         if not is_label:
             # Get the instruction class corresponding to the given alias.
             instruction = instruction_aliases[line[0]]
-            # Translate register aliases after using them as arguments.
-            args = translate_named_regs(lineno, line)
-            # args = tuple([translate_named_regs(reg) for reg in line[1]])
             
             # Construct instruction word
             if instruction.type == 'NOOP':
                 word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
                 word += to_fixed_length_bin(0, 24)                             # FILL
                 words.append(word)
-
-
-            elif instruction.type == 'IMMEDIATE':
-                word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
-                word += to_fixed_length_bin(args[0], reg_length)               # REGISTER
-                word += to_fixed_length_bin(0, 3)                              # PADDING
-                word += to_fixed_length_bin(args[1], 16)                       # IMMEDIATE
-                words.append(word)
-
-            elif instruction.type == 'SINGLE_REG':
-                word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
-                word += to_fixed_length_bin(args[0], reg_length)               # REGISTER
-                word += to_fixed_length_bin(0, 19)                             # FILL
-                words.append(word)
-
-            elif instruction.type == 'DOUBLE_REG' or instruction.type == 'MEMORY':
-                word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
-                word += to_fixed_length_bin(args[0], reg_length)               # REGISTER
-                word += to_fixed_length_bin(args[1], reg_length)               # REGISTER
-                word += to_fixed_length_bin(0, 14)                             # FILL
-                words.append(word)
-
-            elif instruction.type == 'JUMP':
-                is_label_jump = isinstance(args[0], str)
-                # Checks for a jump to label instruction.
-                if is_label_jump:
-                    # Load the address to the reserved register.
-                    word = load_reserved_reg(args[0])
-                    words.append(word)
-                
-                # When jumping to a label, the address is loaded to the reserved register.
-                destination = reserved_reg if is_label_jump else args[0]
-                word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
-                word += to_fixed_length_bin(0, 10)                             # PADDING
-                word += to_fixed_length_bin(destination, reg_length)           # REGISTER
-                word += to_fixed_length_bin(0, 9)                              # FILL
-                words.append(word)
-            elif instruction.type == 'BRANCH':
-                is_label_branch = isinstance(args[2], str)
-                # Checks for a branch to label instruction.
-                if is_label_branch:
-                    # Load the address to the reserved register.
-                    word = load_reserved_reg(args[2])
-                    words.append(word)
-                
-                # When branching to a label, the address is loaded to the reserved register.
-                destination = reserved_reg if is_label_branch else args[2]
-                word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
-                word += to_fixed_length_bin(args[0], reg_length)               # REGISTER
-                word += to_fixed_length_bin(args[1], reg_length)               # REGISTER
-                word += to_fixed_length_bin(destination, reg_length)           # REGISTER
-                word += to_fixed_length_bin(0, 9)                              # FILL
-                words.append(word)
-
-            elif instruction.type == 'CALL':
-                is_label_call = isinstance(args[1], str)
-                # Checks for a call instruction.
-                if is_label_call:
-                    # Load the address to the reserved register.
-                    word = load_reserved_reg(args[1])
+            else:
+                # Translate register aliases after using them as arguments.
+                args = translate_named_regs(lineno, line)
+                if instruction.type == 'IMMEDIATE':
+                    word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
+                    word += to_fixed_length_bin(args[0], reg_length)               # REGISTER
+                    word += to_fixed_length_bin(0, 3)                              # PADDING
+                    word += to_fixed_length_bin(args[1], 16)                       # IMMEDIATE
                     words.append(word)
 
-                # When calling a label, the address is loaded to the reserved register.
-                destination = reserved_reg if is_label_call else args[1]
-                word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
-                word += to_fixed_length_bin(args[0], reg_length)               # REGISTER
-                word += to_fixed_length_bin(0, 5)                              # PADDING
-                word += to_fixed_length_bin(destination, reg_length)           # REGISTER
-                word += to_fixed_length_bin(0, 9)                              # FILL
-                words.append(word)
+                elif instruction.type == 'SINGLE_REG':
+                    word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
+                    word += to_fixed_length_bin(args[0], reg_length)               # REGISTER
+                    word += to_fixed_length_bin(0, 19)                             # FILL
+                    words.append(word)
+
+                elif instruction.type == 'DOUBLE_REG' or instruction.type == 'MEMORY':
+                    word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
+                    word += to_fixed_length_bin(args[0], reg_length)               # REGISTER
+                    word += to_fixed_length_bin(args[1], reg_length)               # REGISTER
+                    word += to_fixed_length_bin(0, 14)                             # FILL
+                    words.append(word)
+
+                elif instruction.type == 'JUMP':
+                    is_label_jump = isinstance(args[0], str)
+                    # Checks for a jump to label instruction.
+                    if is_label_jump:
+                        # Load the address to the reserved register.
+                        word = load_reserved_reg(args[0])
+                        words.append(word)
+                    
+                    # When jumping to a label, the address is loaded to the reserved register.
+                    destination = reserved_reg if is_label_jump else args[0]
+                    word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
+                    word += to_fixed_length_bin(0, 10)                             # PADDING
+                    word += to_fixed_length_bin(destination, reg_length)           # REGISTER
+                    word += to_fixed_length_bin(0, 9)                              # FILL
+                    words.append(word)
+                elif instruction.type == 'BRANCH':
+                    is_label_branch = isinstance(args[2], str)
+                    # Checks for a branch to label instruction.
+                    if is_label_branch:
+                        # Load the address to the reserved register.
+                        word = load_reserved_reg(args[2])
+                        words.append(word)
+                    
+                    # When branching to a label, the address is loaded to the reserved register.
+                    destination = reserved_reg if is_label_branch else args[2]
+                    word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
+                    word += to_fixed_length_bin(args[0], reg_length)               # REGISTER
+                    word += to_fixed_length_bin(args[1], reg_length)               # REGISTER
+                    word += to_fixed_length_bin(destination, reg_length)           # REGISTER
+                    word += to_fixed_length_bin(0, 9)                              # FILL
+                    words.append(word)
+
+                elif instruction.type == 'CALL':
+                    is_label_call = isinstance(args[1], str)
+                    # Checks for a call instruction.
+                    if is_label_call:
+                        # Load the address to the reserved register.
+                        word = load_reserved_reg(args[1])
+                        words.append(word)
+
+                    # When calling a label, the address is loaded to the reserved register.
+                    destination = reserved_reg if is_label_call else args[1]
+                    word  = to_fixed_length_bin(instruction.opcode, opcode_length) # OPCODE
+                    word += to_fixed_length_bin(args[0], reg_length)               # REGISTER
+                    word += to_fixed_length_bin(0, 5)                              # PADDING
+                    word += to_fixed_length_bin(destination, reg_length)           # REGISTER
+                    word += to_fixed_length_bin(0, 9)                              # FILL
+                    words.append(word)
             
             index += 2 if is_label_instruction(line) else 1
             
