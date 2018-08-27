@@ -1,0 +1,189 @@
+/* Reset page styling. */
+
+html, body {
+    margin: 0;
+}
+
+/* Style important elements by id. */
+
+#container {
+    position: fixed;
+
+    height: 100vh;
+    width: 100vw;
+}
+
+#editor {
+    position: absolute;
+    
+    height: 100vh;
+    width: 75vw;
+
+    background-color: black;
+
+    z-index: 0;
+}
+
+#output {
+    position: absolute;
+    
+    height: 100vh;
+    width: 25vw;
+
+    left: 75vw;
+
+    z-index: 0;
+}
+
+#code-generator {
+    position: absolute;
+
+    top: 58px;
+
+    height: calc((100vh - 2 * 58px) * 0.7);
+    width: 25vw;
+
+    border-bottom: 1px solid lightgray;
+}
+
+#assembler-output {
+    position: absolute;
+
+    top: calc(58px + (100vh - 2 * 58px) * 0.7);
+
+    height: calc((100vh - 2 * 58px) * 0.3);
+    width: 25vw;
+}
+
+/* Button classes. */
+
+.btn {
+    position: absolute;
+    
+    outline: none;
+    cursor: pointer;
+  
+    font-size: 20px;
+    color: #dcdcdc;  
+  
+    width: 40px;
+    height: 40px;
+
+    box-shadow: 1.5px 1.5px 1.5px #aaaaaa;
+  
+    border: none; 
+    border-radius: 50%;
+
+    z-index: 10;
+}
+
+.btn:hover {
+    filter: brightness(110%);
+
+    box-shadow: 2px 2px 2px #aaaaaa;
+}
+
+.btn:active {
+    box-shadow: 1px 1px 1px #aaaaaa;
+}
+
+.btn-info {
+    background-color: #2f6bd1;  
+}
+
+.btn-action {
+    background-color: #48a035;
+}
+
+.btn-error {
+    background-color: #d23030;
+}
+
+/* Position individual buttons. */
+
+#btn-save-workspace {
+    bottom: 8px;
+    left: 8px;
+}
+
+#btn-load-workspace {
+    bottom: 8px;
+    left: 55px;
+}
+
+#btn-assemble {
+    bottom: 8px;
+    right: 8px;
+}
+
+#btn-info {
+    top: 8px;
+    right: 8px;
+}
+
+#btn-bug {
+    top: 8px;
+    right: 53px;
+}
+
+/* Style textareas. */
+
+#code-generator textarea {
+    display: block;
+    margin-left: 2%;
+    margin-top: 2%;
+
+    width: 96%;
+    height: 96%;
+    
+    resize: none;
+    border: none;
+    outline: none;
+}
+
+#assembler-output textarea {
+    display: block;
+    margin-left: 2%;
+    margin-top: 2%;
+
+    width: 96%;
+    height: 96%;
+
+    resize: none;
+    border: none;
+    outline: none;
+}
+
+/* Style modals. */
+#modal-info {
+    position: absolute;
+
+    width: 100vw;
+    height: 100vh;
+
+    background-color: white;
+
+    display: none;
+    z-index: 20;
+}
+
+#modal-info-close {    
+    position: absolute;
+
+    outline: none;
+    cursor: pointer;
+  
+    font-size: 20px;
+    color: black;  
+
+    right: 8px;
+    top: 8px;
+}
+
+/* Hide the file input.
+ * A pretty button is used for direct file selection but the input is still needed.
+ */
+
+#file-input {
+    display: none;
+}

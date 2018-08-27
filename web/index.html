@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <meta charset="utf-8">
+    <title>quanta</title>
+
+    <link rel="stylesheet" type="text/css" href="index.css">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
+    <!-- This is not optimal. -->
+    <!-- The blockly code should be rewritten. -->
+    <!-- Anything I rewrite should be a drop in replacement, so I can work on the UI. -->
+    <script src="../external/blockly/blockly_compressed.js"></script>
+    
+    <script src="../toolkit/blockly/generator/quanta.js"></script>
+    <script src="../toolkit/blockly/generator/quanta/math.js"></script>
+    <script src="../toolkit/blockly/generator/quanta/type.js"></script>
+    <script src="../toolkit/blockly/generator/quanta/value.js"></script>
+    <script src="../toolkit/blockly/generator/quanta/instruction.js"></script>
+    <script src="../toolkit/blockly/generator/quanta/label_group.js"></script>
+    
+    <script src="../external/blockly/blocks_compressed.js"></script>
+    <script src="../external/blockly/msg/js/en.js"></script>
+    
+    <script src="../toolkit/blockly/quanta_blocks.js"></script>
+</html>
+
+<body>
+  <xml id="toolbox" style="display: none">
+    <category name="Instruction">
+      <block type="instruction_noop"></block>
+      <block type="instruction_immediate"></block>
+      <block type="instruction_single_register"></block>
+      <block type="instruction_double_register"></block>
+      <block type="instruction_triple_register"></block>
+    </category>
+    <category name="Label">
+      <block type="type_label"></block>
+      <block type="label_group"></block>
+    </category>
+    <category name="Value">
+      <block type="comment"></block>
+      <block type="type_register"></block>
+      <block type="math_number">
+        <field name="NUM">0</field>
+      </block>
+    </category>
+  </xml>
+
+  <div id="container">
+    <div id="editor">
+    </div>
+    <div id="output">
+      <div id="code-generator">
+        <textarea id="output-code-generator" readonly></textarea>
+      </div>
+      <div id="assembler-output">
+        <textarea readonly></textarea>
+      </div>
+    </div>
+      
+    <button class="btn btn-info" id="btn-save-workspace"><i class="fa fa-download"></i></button>
+    <button class="btn btn-info" id="btn-load-workspace"><i class="fa fa-upload"></i></button>
+
+    <button class="btn btn-action" id="btn-assemble"><i class="fa fa-play"></i></button>
+
+    <button class="btn btn-info" id="btn-info"><i class="fa fa-info"></i></button>
+    
+    <!-- This looks like horrible syntax, but it makes more sense to style a button with an icon. -->
+    <!-- It helps keep the styling consistant on the css. -->
+    <a href="https://gitlab.com/tan90/quanta/issues" target="_blank">
+      <button class="btn btn-error" id="btn-bug"><i class="fa fa-bug"></i></button>
+    </a>
+    <input id="file-input" type="file" accept="text/xml"/>
+  </div>
+
+  <div id="modal-info">
+    <span id="modal-info-close"><i class="fa fa-times"></i></span>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>
