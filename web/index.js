@@ -1,9 +1,18 @@
+/*
+ * TODO
+ * Require relevant Blockly js files instead of using script tags on the page.
+ */
+
 /* Inject Blockly into the editor div. */
 var workspace = Blockly.inject('editor', {
         media: '../external/blockly/media/',
         toolbox: document.getElementById('toolbox'),
     });
 
+/* 
+ * Generate code on every workspace change and output result.
+ * The Blockly docs state this is not an expensive operation and can be used for realtime generation. 
+ */
 workspace.addChangeListener(function(event) {
     var codeOutput = document.getElementById('output-code-generator');
     codeOutput.value = Blockly.quanta.workspaceToCode(workspace);
@@ -64,16 +73,37 @@ function handleFileSelect(evt) {
  * Download result if successful.
  */
 document.getElementById('btn-assemble').addEventListener('click', function onGenerate() {
-    // TODO
+    /* Get the workspace code as quanta assembly. */
+    var code = Blockly.quanta.workspaceToCode(workspace);
+
+    /* Send async request to the assembler API. */
+    var request = new XMLHttpRequest();
+    request.open('POST', 'http://ec2-18-228-117-206.sa-east-1.compute.amazonaws.com/assembler', true);
+    request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+    request.send(JSON.stringify({ "program": code }));
+
+    /* Handle response. */
+    request.onloadend = function () {
+        var resp = JSON.parse(request.response);
+
+        /* Log API response to assembler output. */
+        document.getElementById('output-assembler-output').value = resp.output
+        if (!resp.error) {
+            var name = prompt('Name of the file:', 'quanta2inst');
+            if (name) {
+                download(resp.assembly, name + '.mif');
+            }
+        }
+    }
 });
 
 /*
  * Save current workspace as xml when the save button is clicked.
  */
-document.getElementById('btn-save-workspace').addEventListener('click', function onGenerate() {
+document.getElementById('btn-save-workspace').addEventListener('click', function() {
     var fileName = prompt('Name of the file:', 'workspace');
     // Only trigger a file save if the prompt was not cancelled.
-    if(fileName != null)
+    if(fileName)
     {
         // Get the current workspace as xml and download it.
         var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
@@ -84,7 +114,7 @@ document.getElementById('btn-save-workspace').addEventListener('click', function
 /*
  * Trigger a click on the file input when the load button is clicked.
  */
-document.getElementById('btn-load-workspace').addEventListener('click', function onGenerate() {
+document.getElementById('btn-load-workspace').addEventListener('click', function() {
     document.getElementById('file-input').click();
 });
 
