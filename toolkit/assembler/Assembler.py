@@ -2,6 +2,7 @@
 ## @brief quanta assembler.
 
 import argparse
+import sys
 
 from Parser import parse
 from Util import to_fixed_length_bin, format_error, format_column_marker
@@ -137,7 +138,7 @@ def assemble(data):
                     error_pointer = 'line {}> '.format(lineno)
                     description = format_column_marker(input_line, error_column, error_pointer)
                     
-                    print(format_error(title, description))
+                    sys.stderr.write(format_error(title, description))
                     exit(-1)
                 translated_regs.append(register_aliases[reg[0]])
             else:
@@ -158,7 +159,7 @@ def assemble(data):
                     error_pointer = 'line {}> '.format(lineno)
                     description = format_column_marker(input_line, error_column, error_pointer)
 
-                    print(format_error(title, description))
+                    sys.stderr.write(format_error(title, description))
                     exit(-1)
 
         address = labels[label]
@@ -259,7 +260,7 @@ def assemble(data):
             
             index += 2 if is_label_instruction(line) else 1
             
-    print('Assembler successful.')
+    sys.stdout.write('Assembler successful.')
     return words
 
 
