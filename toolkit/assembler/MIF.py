@@ -16,7 +16,7 @@ class MIF:
         ## @brief The number of data words.
         self.depth = depth
         ## @brief The address width for the specified radix calculeated by the world count.
-        self.address_width = int(math.log2(depth))
+        self.address_width = int(math.log(depth, 2))
 
         ## @brief The address radix to be used when exporting to a file.
         ## @details At the moment only binary radix is supported, so this is ignored.

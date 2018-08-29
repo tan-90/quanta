@@ -163,8 +163,8 @@ def assemble(data):
             error_pointer = 'line {}> '.format(lineno)
             description = format_column_marker(input_line, error_column, error_pointer)
 
-                    sys.stderr.write(format_error(title, description))
-                    exit(-1)
+            sys.stderr.write(format_error(title, description))
+            exit(-1)
 
         address = labels[label]
         word  = to_fixed_length_bin(instruction_li.opcode, opcode_length) # OPCODE
