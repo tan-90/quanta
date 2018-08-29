@@ -39,7 +39,7 @@ def p_label(p):
 
 def p_instr_noop(p):
     '''instr_noop : NOOP'''
-    p[0] = p[1]
+    p[0] = (p[1],)
 
 def p_instr_immediate(p):
     '''instr_immediate : IMMEDIATE reg COMMA NUMBER'''
@@ -100,6 +100,13 @@ def p_empty(p):
 
 def p_error(p):
     global error_log
+    # For some errors, ply reports the next production.
+    # This is a problem if the cause is EOF.
+    # If the file ends, the next production is None, so that corresponds to an unexpected EOF.
+    # Better logs would require error productions, something the assembler does not have (and that is not planned).
+    if p is None:
+        print('Assembler failed.\nUnexpected EOF.')
+        exit(-1)
     # Save error information on the parser's error log.
     error_log.append({
         'lineno': p.lineno,
