@@ -138,7 +138,7 @@ def parse(data):
             message = Util.format_column_marker(line, error['column'], error_pointer)
             description.append(message)
 
-        print(Util.format_error(title, '\n'.join(description)))
+        sys.stderr.write(Util.format_error(title, '\n'.join(description)))
         exit(-1)
 
     parser = yacc.yacc(start='program')
@@ -160,7 +160,7 @@ def parse(data):
             message = Util.format_column_marker(line, error['column'], error_pointer)
             description.append(message)
 
-        print(Util.format_error(title, '\n'.join(description)))
+        sys.stderr.write(Util.format_error(title, '\n'.join(description)))
         exit(-1)
         
     return parser.lines
