@@ -105,7 +105,7 @@ def p_error(p):
     # If the file ends, the next production is None, so that corresponds to an unexpected EOF.
     # Better logs would require error productions, something the assembler does not have (and that is not planned).
     if p is None:
-        print('Assembler failed.\nUnexpected EOF.')
+        sys.stderr.write('Assembler failed.\nUnexpected EOF.')
         exit(-1)
     # Save error information on the parser's error log.
     error_log.append({

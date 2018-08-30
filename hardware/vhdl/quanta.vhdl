@@ -19,9 +19,16 @@ use work.pipeline_records;
 entity quanta is
     port
     (
-      clock_in  : in std_logic; --! Clock signal.
-      reset_in  : in std_logic; --! Active high reset signal.
-      enable_in : in std_logic  --! Active high enable signal.
+      clock_in      : in std_logic; --! Clock signal.
+      reset_in      : in std_logic; --! Active high reset signal.
+      enable_in     : in std_logic;  --! Active high enable signal.
+
+      inspect_in    : in std_logic_vector(31 downto 0); --! Debug IO system. Conected to a register to work as input.
+
+      inspect_0_out : out std_logic_vector(31 downto 0); --! Debug IO system. Conected to a resgister to work as output.
+      inspect_1_out : out std_logic_vector(31 downto 0); --! Debug IO system. Conected to a resgister to work as output.
+      inspect_2_out : out std_logic_vector(31 downto 0); --! Debug IO system. Conected to a resgister to work as output.
+      inspect_3_out : out std_logic_vector(31 downto 0)  --! Debug IO system. Conected to a resgister to work as output.
     );
 end entity quanta;
 
@@ -230,6 +237,8 @@ begin
     
 		    instruction_in   => fetch_instruction_s,
     
+            inspect_in       => inspect_in,
+
 		    a_out            => decode_a_s,
 		    b_out            => decode_b_s,
 		    c_out            => decode_c_s,
@@ -240,7 +249,12 @@ begin
     
 		    a_address_out    => decode_a_address_s,
 		    b_address_out    => decode_b_address_s,
-		    c_address_out    => decode_c_address_s
+            c_address_out    => decode_c_address_s,
+            
+            inspect_0_out    => inspect_0_out, 
+            inspect_1_out    => inspect_1_out, 
+            inspect_2_out    => inspect_2_out, 
+            inspect_3_out    => inspect_3_out  
         );
 
         -- Controller

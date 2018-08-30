@@ -22,7 +22,9 @@ entity decode is
 		write_data_in    : in  std_logic_vector(31 downto 0); --! Register file write data input.
 		
 		instruction_in   : in  std_logic_vector(31 downto 0); --! The instruction to decode.
-		
+
+		inspect_in       : in std_logic_vector(31 downto 0); --! Debug IO system. Conected to a register to work as input.
+
 		a_out            : out std_logic_vector(31 downto 0); --! Value of register A pointed by the current instruction.
 		b_out            : out std_logic_vector(31 downto 0); --! Value of register B pointed by the current instruction.
 		c_out            : out std_logic_vector(31 downto 0); --! Value of register C pointed by the current instruction.
@@ -33,7 +35,12 @@ entity decode is
 		
 		a_address_out    : buffer std_logic_vector( 4 downto 0); --! Address of register A pointed by the current instruction.
 		b_address_out    : buffer std_logic_vector( 4 downto 0); --! Address of register C pointed by the current instruction.
-		c_address_out    : buffer std_logic_vector( 4 downto 0)  --! Address of register A pointed by the current instruction.
+		c_address_out    : buffer std_logic_vector( 4 downto 0);  --! Address of register A pointed by the current instruction.
+		
+		inspect_0_out    : out std_logic_vector(31 downto 0); --! Debug IO system. Conected to a resgister to work as output.
+		inspect_1_out    : out std_logic_vector(31 downto 0); --! Debug IO system. Conected to a resgister to work as output.
+		inspect_2_out    : out std_logic_vector(31 downto 0); --! Debug IO system. Conected to a resgister to work as output.
+		inspect_3_out    : out std_logic_vector(31 downto 0)  --! Debug IO system. Conected to a resgister to work as output.
  	);
 end entity decode;
 
@@ -51,7 +58,7 @@ begin
 	
 	a_address_out               <= instruction_in(23 downto 19);
 	b_address_out               <= instruction_in(18 downto 14);
-   c_address_out               <= instruction_in(13 downto  9);
+	c_address_out               <= instruction_in(13 downto  9);
 	
    --! @brief Pipeline register file.
 	--! @details Accepts data from the decode stage input.
@@ -70,9 +77,16 @@ begin
         address_a_in     => a_address_out,
         address_b_in     => b_address_out,
         address_c_in     => c_address_out,
-        
+		
+		inspect_in       => inspect_in,
+		
         data_a_out       => a_out,
         data_b_out       => b_out,
-        data_c_out       => c_out
+		data_c_out       => c_out,
+
+		inspect_0_out    => inspect_0_out, 
+		inspect_1_out    => inspect_1_out, 
+		inspect_2_out    => inspect_2_out, 
+		inspect_3_out    => inspect_3_out  		
 	);
 end architecture behavioral;
