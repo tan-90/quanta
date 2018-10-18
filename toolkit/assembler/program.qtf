@@ -1,41 +1,6 @@
-; $20 get the value of the switches
-; $16 is wired to the LEDs
-; $17, $18, $19 is wired to the 7-segment displays
-li $0, 0
-li $1, 1
-li $2, 3
-li $10, 0
-
-move $4, $20
-call $30, mul
-move $16, $10
-move $17, $10
-move $18, $10
-move $19, $ra
-j end
-
-move $4, $20
-not $10
-call $30, mul
-move $16, $10
-j end
-
-mul:
-    add $10, $2
-    sub $4, $1
-
-    jne $4, $0, mul
-    j $30
-    jne $0, $1, end
-end:
-call $0, mul
-call $0, div
-mul:
-div:
-
-load $0, $1
-load $0, $ra
-call $0, $ra
-
-end:
-    j end
+loop:
+    move $leds, $switches
+    move $hex0, $switches
+    move $hex1, $switches
+    move $hex2, $switches
+    j loop

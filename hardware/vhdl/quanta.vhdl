@@ -20,8 +20,8 @@ entity quanta is
     port
     (
       clock_in      : in std_logic; --! Clock signal.
-      reset_in      : in std_logic; --! Active high reset signal.
-      enable_in     : in std_logic;  --! Active high enable signal.
+      reset_in      : in std_logic := '0'; --! Active high reset signal.
+      enable_in     : in std_logic := '1';  --! Active high enable signal.
 
       inspect_in    : in std_logic_vector(31 downto 0); --! Debug IO system. Conected to a register to work as input.
 
@@ -37,6 +37,9 @@ end entity quanta;
 --! @details Signals to wire components are named the same as in the component, with the component name as a prefix and _s as a suffix.
 --! @details Signals to wire components are documented with references to the actual component.
 architecture behavioral of quanta is
+    --! @brief The debounced input.
+    signal debounced_inspect_s : std_logic_vector(31 downto 0);
+
     -- FETCH
         --! @brief Used to wire fetch output signals to processor components.
         --! @see fetch
@@ -197,6 +200,17 @@ architecture behavioral of quanta is
     --! @see memory_access
     signal write_back_data_s : std_logic_vector(31 downto 0);
 begin
+    debouncers: for i in 0 to 31 generate
+	begin
+		current_debouncer: entity work.debounce(behavioral)
+        port map
+        (
+            clk    => clock_in,
+            button => inspect_in(i),
+            result => debounced_inspect_s(i)
+        );
+	end generate debouncers;
+
     -- FETCH
         --! @brief Pipeline fetch stage component.
         --! @see fetch
@@ -237,7 +251,7 @@ begin
     
 		    instruction_in   => fetch_instruction_s,
     
-            inspect_in       => inspect_in,
+            inspect_in       => debounced_inspect_s,
 
 		    a_out            => decode_a_s,
 		    b_out            => decode_b_s,
