@@ -31,7 +31,7 @@ use ieee.std_logic_1164.all;
 --! use unsigned logic for converting logic vectors to integers.
 use ieee.std_logic_unsigned.all;
 
---! @brief Debouncer. Taken (and modified) from https://www.digikey.com/eewiki/pages/viewpage.action?pageId=4980758#DebounceLogicCircuit(withVHDLexample)-ExampleVHDLCode.
+--! @brief Debouncer.
 --! @details Only changes output signal if input is stable for some period of time.
 --! @details Circuit diagram and proper explanation available 
 entity debounce is
