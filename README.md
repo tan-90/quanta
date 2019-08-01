@@ -13,8 +13,6 @@ The quanta toolkit initially consisted of an assembler for text files, but was e
 A late addition to the toolkit was the VHDL test generator tgen that automatically generates a a testbench for a given VHDL source. The testbench is generated for testing the VHDL entity using the stimulus provided on a CSV file, checking the output against the expected values and generating a log file with the test results indicating what individual tests failed, if any. The use of tgen turned out to be unpractical for large enities, as writing the CSV file took a long time. This lead to the idea of adding a waveform editor that exports CSV files to the toolkit, but that's not yet finished. Despite the test tools not being complete, the circuit has been tested using various assembly programs and as far as I am aware, no bugs are present.
 
 ## Notes
-quanta is my final course assignment, so despite being a HUGE project I can't accept pull requests. YET. I have a lot of ideas to make quanta a much better tool for teaching processor architecture, increasing even more the size of the project. After my course is finished, I might keep working on it and then there will be no problem on accepting help.
-
 This is my first big VHDL project and it involved a lot of tool development that took a lot of time. As a graduating computer scientist, I have a lot to learn about circuit design, so much can be improved.
 
 Documenting the usage of a project like this is also really hard and time consuming, so the manuals might be lacking. However, if you have any trouble trying out quanta send me an [email](mailto:tan-90@outlook.com) and I'll gladly assist you.
